@@ -113,6 +113,7 @@
             <field name="arch" type="xml">
                 <tree string="Transformation">
                     <field name="name"/>
+                    <field name="directory"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -126,6 +127,7 @@
             <field name="arch" type="xml">
                 <form string="Transformation">
                     <field name="name" select="1"/>
+                    <field name="directory" select="1"/>
                     <field name="state"/>
                 </form>
             </field>
@@ -143,6 +145,7 @@
             <field name="arch" type="xml">
                 <tree string="Task">
                     <field name="name"/>
+                    <field name="directory"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -156,6 +159,7 @@
             <field name="arch" type="xml">
                 <form string="Task">
                     <field name="name" select="1"/>
+                    <field name="directory" select="1"/>
                     <field name="state"/>
                 </form>
             </field>

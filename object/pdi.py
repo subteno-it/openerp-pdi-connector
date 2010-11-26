@@ -70,8 +70,10 @@ class PdiTransformation(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=128, ),
-        'instance_id': fields.many2one('pdi.instance', 'Instance', ),
-        'state': fields.selection(_pdi_status, 'Status', ),
+        'instance_id': fields.many2one('pdi.instance', 'Instance'),
+        'state': fields.selection(_pdi_status, 'Status'),
+        'directory': fields.char('Directory', size=256),
+
     }
 
 PdiTransformation()
@@ -85,6 +87,7 @@ class PdiTask(osv.osv):
         'name': fields.char('Name', size=128, ),
         'instance_id': fields.many2one('pdi.instance', 'Instance', ),
         'state': fields.selection(_pdi_status, 'Status', ),
+        'directory': fields.char('Directory', size=256),
     }
 
 PdiTask()
