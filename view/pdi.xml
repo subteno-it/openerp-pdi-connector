@@ -54,6 +54,12 @@
                         <page string="Transformation">
                             <field name="trans_ids" nolabel="1" mode="tree,form"/>
                         </page>
+                        <page string="Tasks">
+                            <field name="task_ids" nolabel="1" mode="tree,form"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1" />
+                        </page>
                     </notebook>
                 </form>
             </field>
@@ -101,6 +107,7 @@
             <field name="arch" type="xml">
                 <tree string="Transformation">
                     <field name="name"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -113,6 +120,37 @@
             <field name="arch" type="xml">
                 <form string="Transformation">
                     <field name="name" select="1"/>
+                    <field name="state"/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ************************************************************** -->
+        <!-- ** PDI Task ************************************************** -->
+        <!-- ************************************************************** -->
+
+        <record id="view_pdi_task_tree" model="ir.ui.view">
+            <field name="name">pdi.task.tree</field>
+            <field name="model">pdi.task</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Task">
+                    <field name="name"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pdi_task_form" model="ir.ui.view">
+            <field name="name">pdi.task.form</field>
+            <field name="model">pdi.task</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Task">
+                    <field name="name" select="1"/>
+                    <field name="state"/>
                 </form>
             </field>
         </record>

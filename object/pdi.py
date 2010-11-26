@@ -31,6 +31,8 @@ _pdi_version = [
     ('4.1', 'v4.1'),
 ]
 
+root_install = '/opt/pdi'
+
 
 class PdiInstance(osv.osv):
     _name = 'pdi.instance'
@@ -40,23 +42,42 @@ class PdiInstance(osv.osv):
         'name': fields.char('Name', size=64, ),
         'version': fields.selection(_pdi_version, 'Version', ),
         'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
+        'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
+        'note': fields.text('Note', ),
     }
 
 PdiInstance()
+
+_pdi_status = [
+    ('disable', 'Disable'),
+    ('stop', 'Stopped'),
+    ('run', 'Running'),
+]
 
 
 class PdiTransformation(osv.osv):
     _name = 'pdi.transformation'
     _description = 'Transformation of a PDI instance'
-    
+
     _columns = {
         'name': fields.char('Name', size=128, ),
-        'instance_id': fields.many2one('pdi.instance', 'Label', ),
-        
+        'instance_id': fields.many2one('pdi.instance', 'Instance', ),
+        'state': fields.selection(_pdi_status, 'Status', ),
     }
 
 PdiTransformation()
 
 
+class PdiTask(osv.osv):
+    _name = 'pdi.task'
+    _description = 'Task of a PDI instance'
+
+    _columns = {
+        'name': fields.char('Name', size=128, ),
+        'instance_id': fields.many2one('pdi.instance', 'Instance', ),
+        'state': fields.selection(_pdi_status, 'Status', ),
+    }
+
+PdiTask()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
