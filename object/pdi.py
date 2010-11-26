@@ -44,6 +44,15 @@ class PdiInstance(osv.osv):
         'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
         'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
         'note': fields.text('Note', ),
+        'repo_name': fields.char('Name', size=256, help='Enter the name of the repository'),
+        'repo_user': fields.char('Username', size=64, help='Enter the username for this repository'),
+        'repo_pass': fields.char('Password', size=64, help='Enter the password for this repository'),
+    }
+
+    _defaults = {
+        'repo_name': lambda *a: '',
+        'repo_user': lambda *a: 'admin',
+        'repo_pass': lambda *a: 'admin',
     }
 
 PdiInstance()

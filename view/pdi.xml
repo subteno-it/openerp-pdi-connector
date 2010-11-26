@@ -51,6 +51,12 @@
                     <field name="name" select="1"/>
                     <field name="version" select="2"/>
                     <notebook colspan="4">
+                        <page string="General">
+                            <separator string="Repository information" colspan="4"/>
+                            <field name="repo_name" colspan="4"/>
+                            <field name="repo_user"/>
+                            <field name="repo_pass"/>
+                        </page>
                         <page string="Transformation">
                             <field name="trans_ids" nolabel="1" mode="tree,form"/>
                         </page>
