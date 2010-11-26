@@ -22,34 +22,41 @@
 #
 ##############################################################################
 
-{
-    'name': 'PDI Connector',
-    'version': '0.1.0',
-    'category': 'Custom',
-    'description': """Module to manage Pentaho Data Integration
-    - Start task or transformation define on the repository
-    - Schedule a task
-    """,
-    'author': 'SYLEAM',
-    'website': 'http://www.syleam.fr/',
-    'depends': [
-        'base',
-        'import_export',
-    ],
-    'init_xml': [],
-    'update_xml': [
-        #'security/groups.xml',
-        #'security/ir.model.access.csv',
-        'view/menu.xml',
-        'view/pdi.xml',
-        #'wizard/wizard.xml',
-        #'report/report.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-    'license': 'GPL-3',
-}
+from osv import osv
+from osv import fields
+
+_pdi_version = [
+    ('3.2', 'v3.2'),
+    ('4.0', 'v4.0'),
+    ('4.1', 'v4.1'),
+]
+
+
+class PdiInstance(osv.osv):
+    _name = 'pdi.instance'
+    _description = 'Instance of PDI server'
+
+    _columns = {
+        'name': fields.char('Name', size=64, ),
+        'version': fields.selection(_pdi_version, 'Version', ),
+        'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
+    }
+
+PdiInstance()
+
+
+class PdiTransformation(osv.osv):
+    _name = 'pdi.transformation'
+    _description = 'Transformation of a PDI instance'
+    
+    _columns = {
+        'name': fields.char('Name', size=128, ),
+        'instance_id': fields.many2one('pdi.instance', 'Label', ),
+        
+    }
+
+PdiTransformation()
+
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

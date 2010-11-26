@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        ##############################################################################
+        #
+        #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
+        #    Copyright (C) 2010 SYLEAM ([http://www.syleam.fr/])
+        #              Christophe CHAUVET [christophe.chauvet@syleam.fr]
+        #
+        #    This file is a part of pdi_connector
+        #
+        #    pdi_connector is free software: you can redistribute it and/or modify
+        #    it under the terms of the GNU General Public License as published by
+        #    the Free Software Foundation, either version 3 of the License, or
+        #    (at your option) any later version.
+        #
+        #    pdi_connector is distributed in the hope that it will be useful,
+        #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        #    GNU General Public License for more details.
+        #
+        #    You should have received a copy of the GNU General Public License
+        #    along with this program.  If not, see [http://www.gnu.org/licenses/].
+        #
+        ##############################################################################
+
+        <!-- ************************************************************** -->
+        <!-- ** PDI Instance ********************************************** -->
+        <!-- ************************************************************** -->
+
+        <record id="view_pdi_instance_tree" model="ir.ui.view">
+            <field name="name">pdi.instance.tree</field>
+            <field name="model">pdi.instance</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="PDI Instance">
+                    <field name="name"/>
+                    <field name="version"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pdi_instance_form" model="ir.ui.view">
+            <field name="name">pdi.instance.form</field>
+            <field name="model">pdi.instance</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="PDI Instance">
+                    <field name="name" select="1"/>
+                    <field name="version" select="2"/>
+                    <notebook colspan="4">
+                        <page string="Transformation">
+                            <field name="trans_ids" nolabel="1" mode="tree,form"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_pdi_instance_view">
+            <field name="name">PDI Instance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pdi.instance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_instance_view_form">
+            <field name="act_window_id" ref="act_open_pdi_instance_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_pdi_instance_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_instance_view_tree">
+            <field name="act_window_id" ref="act_open_pdi_instance_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_pdi_instance_tree"/>
+        </record>
+
+        <menuitem id="menu_pdi_instance"
+            parent="menu_pdi_root"
+            sequence="20"
+            action="act_open_pdi_instance_view"/>
+
+
+        <!-- ************************************************************** -->
+        <!-- ** PDI Transformation **************************************** -->
+        <!-- ************************************************************** -->
+
+        <record id="view_pdi_transformation_tree" model="ir.ui.view">
+            <field name="name">pdi.transformation.tree</field>
+            <field name="model">pdi.transformation</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Transformation">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_pdi_transformation_form" model="ir.ui.view">
+            <field name="name">pdi.transformation.form</field>
+            <field name="model">pdi.transformation</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Transformation">
+                    <field name="name" select="1"/>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>
