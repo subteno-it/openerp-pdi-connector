@@ -58,10 +58,32 @@
                             <field name="repo_pass"/>
                         </page>
                         <page string="Transformation">
-                            <field name="trans_ids" nolabel="1" mode="tree,form"/>
+                            <field name="trans_ids" nolabel="1" mode="tree,form">
+                                <tree string="Transformation">
+                                    <field name="name"/>
+                                    <field name="directory"/>
+                                    <field name="state"/>
+                                </tree>
+                                <form string="Transformation">
+                                    <field name="name" select="1"/>
+                                    <field name="directory" select="1"/>
+                                    <field name="state"/>
+                                </form>
+                            </field>
                         </page>
                         <page string="Tasks">
-                            <field name="task_ids" nolabel="1" mode="tree,form"/>
+                            <field name="task_ids" nolabel="1" mode="tree,form">
+                <tree string="Task">
+                    <field name="name"/>
+                    <field name="directory"/>
+                    <field name="state"/>
+                </tree>
+                <form string="Task">
+                    <field name="name" select="1"/>
+                    <field name="directory" select="1"/>
+                    <field name="state"/>
+                </form>
+                            </field>
                         </page>
                         <page string="Notes">
                             <field name="note" nolabel="1" />
@@ -112,6 +134,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Transformation">
+                    <field name="instance_id"/>
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
@@ -126,12 +149,42 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Transformation">
+                    <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
                     <field name="state"/>
                 </form>
             </field>
         </record>
+
+        <record model="ir.actions.act_window" id="act_open_pdi_transformation_view">
+            <field name="name">PDI Transformation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pdi.transformation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_transformation_view_form">
+            <field name="act_window_id" ref="act_open_pdi_transformation_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_pdi_transformation_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_transformation_view_tree">
+            <field name="act_window_id" ref="act_open_pdi_transformation_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_pdi_transformation_tree"/>
+        </record>
+
+        <menuitem id="menu_pdi_transformation"
+            parent="menu_pdi_root"
+            sequence="30"
+            action="act_open_pdi_transformation_view"/>
 
         <!-- ************************************************************** -->
         <!-- ** PDI Task ************************************************** -->
@@ -144,6 +197,7 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Task">
+                    <field name="instance_id"/>
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
@@ -158,12 +212,44 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Task">
+                    <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
                     <field name="state"/>
                 </form>
             </field>
         </record>
+
+        <record model="ir.actions.act_window" id="act_open_pdi_task_view">
+            <field name="name">PDI Task</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pdi.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_task_view_form">
+            <field name="act_window_id" ref="act_open_pdi_task_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_pdi_task_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_pdi_task_view_tree">
+            <field name="act_window_id" ref="act_open_pdi_task_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_pdi_task_tree"/>
+        </record>
+
+        <menuitem id="menu_pdi_task"
+            parent="menu_pdi_root"
+            sequence="30"
+            action="act_open_pdi_task_view"/>
+
+
 
     </data>
 </openerp>

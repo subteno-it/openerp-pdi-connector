@@ -65,6 +65,9 @@ _pdi_status = [
 
 
 class PdiTransformation(osv.osv):
+    """
+    Manage Transformation in the kettle repository
+    """
     _name = 'pdi.transformation'
     _description = 'Transformation of a PDI instance'
 
@@ -80,6 +83,9 @@ PdiTransformation()
 
 
 class PdiTask(osv.osv):
+    """
+    Manage Task in the kettle repository
+    """
     _name = 'pdi.task'
     _description = 'Task of a PDI instance'
 
