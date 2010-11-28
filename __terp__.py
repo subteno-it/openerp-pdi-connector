@@ -39,7 +39,7 @@
     'init_xml': [],
     'update_xml': [
         'security/groups.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'view/menu.xml',
         'view/pdi.xml',
         #'wizard/wizard.xml',

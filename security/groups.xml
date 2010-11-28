@@ -32,5 +32,11 @@
             <field name="name">PDI / Manager</field>
         </record>
 
+        <record id="group_pdi_menu" model="res.groups">
+            <field name="name">PDI / Menu</field>
+            <field name="comment">Use to display the kettle as root menu
+select another group (user or manager) to user the transformation or task</field>
+        </record>
+
     </data>
 </openerp>
