@@ -122,6 +122,13 @@
             sequence="20"
             action="act_open_pdi_instance_view"/>
 
+        <!-- ** add new shortcut for single user ************************* -->
+
+        <menuitem id="menu_pdi_instance_user"
+            parent="menu_pdi_userroot"
+            sequence="20"
+            action="act_open_pdi_instance_view"/>
+
 
         <!-- ************************************************************** -->
         <!-- ** PDI Transformation **************************************** -->
@@ -183,6 +190,13 @@
 
         <menuitem id="menu_pdi_transformation"
             parent="menu_pdi_root"
+            sequence="30"
+            action="act_open_pdi_transformation_view"/>
+
+        <!-- ** add new shortcut for single user ************************* -->
+
+        <menuitem id="menu_pdi_transformation_user"
+            parent="menu_pdi_userroot"
             sequence="30"
             action="act_open_pdi_transformation_view"/>
 
@@ -249,7 +263,12 @@
             sequence="30"
             action="act_open_pdi_task_view"/>
 
+        <!-- ** add new shortcut for single user ************************* -->
 
+        <menuitem id="menu_pdi_task_user"
+            parent="menu_pdi_userroot"
+            sequence="40"
+            action="act_open_pdi_task_view"/>
 
     </data>
 </openerp>

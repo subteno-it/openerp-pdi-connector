@@ -30,5 +30,11 @@
             name="PDI Configuration"
             icon="STOCK_CONVERT"/>
 
+
+        <menuitem id="menu_pdi_userroot" 
+            sequence="200"
+            name="PDI - ETL"
+            icon="STOCK_CONVERT"/>
+
     </data>
 </openerp>
