@@ -7,5 +7,17 @@
     <record id="pdi_connector.menu_pdi_root" model="ir.ui.menu">
       <field name="groups_id" eval="[(4, ref('pdi_connector.group_pdi_user'))]"/>
     </record>
+    <record id="pdi_connector.menu_pdi_userroot" model="ir.ui.menu">
+      <field name="groups_id" eval="[(4, ref('pdi_connector.group_pdi_menu'))]"/>
+    </record>
+    <record id="pdi_connector.menu_pdi_instance_user" model="ir.ui.menu">
+      <field name="groups_id" eval="[(4, ref('pdi_connector.group_pdi_menu'))]"/>
+    </record>
+    <record id="pdi_connector.menu_pdi_transformation_user" model="ir.ui.menu">
+      <field name="groups_id" eval="[(4, ref('pdi_connector.group_pdi_menu'))]"/>
+    </record>
+    <record id="pdi_connector.menu_pdi_task_user" model="ir.ui.menu">
+      <field name="groups_id" eval="[(4, ref('pdi_connector.group_pdi_menu'))]"/>
+    </record>
   </data>
 </openerp>
