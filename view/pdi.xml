@@ -59,30 +59,35 @@
                         </page>
                         <page string="Transformation">
                             <field name="trans_ids" nolabel="1" mode="tree,form">
-                                <tree string="Transformation">
+                                <tree string="Transformation" colors="grey:state=='stop'">
                                     <field name="name"/>
                                     <field name="directory"/>
                                     <field name="state"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                                 </tree>
                                 <form string="Transformation">
                                     <field name="name" select="1"/>
                                     <field name="directory" select="1"/>
                                     <field name="state"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                                 </form>
                             </field>
                         </page>
                         <page string="Tasks">
                             <field name="task_ids" nolabel="1" mode="tree,form">
-                <tree string="Task">
-                    <field name="name"/>
-                    <field name="directory"/>
-                    <field name="state"/>
-                </tree>
-                <form string="Task">
-                    <field name="name" select="1"/>
-                    <field name="directory" select="1"/>
-                    <field name="state"/>
-                </form>
+                                <tree string="Task" colors="grey:state=='stop'">
+                                    <field name="name"/>
+                                    <field name="directory"/>
+                                    <field name="state"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_task"/>
+                                </tree>
+                                <form string="Task">
+                                    <field name="name" select="1"/>
+                                    <field name="directory" select="1"/>
+                                    <newline/>
+                                    <field name="state"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
+                                </form>
                             </field>
                         </page>
                         <page string="Notes">
@@ -145,6 +150,7 @@
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
+                    <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                 </tree>
             </field>
         </record>
@@ -159,7 +165,9 @@
                     <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
+                    <newline/>
                     <field name="state"/>
+                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                 </form>
             </field>
         </record>
@@ -215,6 +223,7 @@
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
+                    <button string="Launch" states="stop" type="object" name="execute_task"/>
                 </tree>
             </field>
         </record>
@@ -229,7 +238,9 @@
                     <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
+                    <newline/>
                     <field name="state"/>
+                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
                 </form>
             </field>
         </record>
