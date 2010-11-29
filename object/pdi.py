@@ -125,16 +125,16 @@ class PdiTransformation(osv.osv):
             Execute the transformation in a thread
             """
             cr = pooler.get_db(cr.dbname).cursor()
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, 'Thread start') 
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Thread start')
 
-            out_filename = '/tmp/pdi-stdout-%s.log' % str(ids[0])
+            out_filename = '/tmp/pan-stdout-%s.log' % str(ids[0])
             outfp = open(out_filename, 'w')
 
-            err_filename = '/tmp/pdi-stderr-%s.log' % str(ids[0])
+            err_filename = '/tmp/pan-stderr-%s.log' % str(ids[0])
             errfp = open(err_filename, 'w')
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, 'Call process') 
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Call process')
             retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, cwd=path)
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, 'End call process (return code: %s)' % str(retcode))
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
 
@@ -172,7 +172,7 @@ class PdiTransformation(osv.osv):
             cr.close()
             return True
 
-        logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, 'Compose thread with %s' % ' '.join(cmd)) 
+        logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Compose thread with %s' % ' '.join(cmd))
         thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, context))
         return True
 
@@ -201,8 +201,83 @@ class PdiTask(osv.osv):
         """
         Execute the task
         """
-        print 'task'
+        if context is None:
+            context = {}
 
+        transf = self.browse(cr, uid, ids[0], context=context)
+
+        if transf.state in ('disable', 'run'):
+            # already launched or disable
+            return True
+
+        self.write(cr, uid, ids, {'state': 'run'}, context=context)
+
+        pdi = root_install + '/' + transf.instance_id.version
+        if not os.path.exists(pdi):
+            raise osv.except_osv(_('Error'), _('pdi path does not exist'))
+
+        cmd = [
+            '%s/kitchen.sh' % pdi,
+            '-rep=%s' % transf.instance_id.repo_name,
+            '-user=%s' % transf.instance_id.repo_user,
+            '-pass=%s' % transf.instance_id.repo_pass,
+            '-dir=%s' % transf.directory,
+            '-job=%s' % transf.name,
+            #'-listdir',
+        ]
+
+        def thread_task(cr, uid, ids, cmd, path, context):
+            """
+            Execute the transformation in a thread
+            """
+            cr = pooler.get_db(cr.dbname).cursor()
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Thread start')
+
+            out_filename = '/tmp/kitchen-stdout-%s.log' % str(ids[0])
+            outfp = open(out_filename, 'w')
+
+            err_filename = '/tmp/kitchen-stderr-%s.log' % str(ids[0])
+            errfp = open(err_filename, 'w')
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Call process')
+            retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, cwd=path)
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) End call process (return code: %s)' % str(retcode))
+            outfp.close()
+            errfp.close()
+
+            note = False
+            prefix = "[ERROR]"
+            if retcode == 0:
+                prefix = "[SUCCESS]"
+            elif retcode == 1:
+                note = _('(1) Errors occurred during processing')
+            elif retcode == 2:
+                note = _('(2) An unexpected error occurred during loading / running of the task')
+            elif retcode == 7:
+                note = _("The task couldn't be loaded from XML or the Repository'")
+            elif retcode == 8:
+                note = _('Error loading steps or plugins (error in loading one of the plugins mostly)')
+            elif retcode == 9:
+                note = _('Command line usage printing')
+            else:
+                note = _('Unknown error %s') % retcode
+
+            vals = {
+                'datas': base64.encodestring(open(out_filename, 'rb').read()),
+                'datas_fname': out_filename,
+                'name': prefix + ' ' + transf.name,
+                'res_model': 'pdi.task',
+                'res_id': ids[0],
+                'description': note,
+            }
+            self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+
+            self.write(cr, uid, ids, {'state': 'stop'}, context=context)
+            cr.commit()
+            cr.close()
+            return True
+
+        logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Compose thread with %s' % ' '.join(cmd))
+        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, context))
         return True
 
 PdiTask()
