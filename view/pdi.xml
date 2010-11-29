@@ -168,6 +168,20 @@
                     <newline/>
                     <field name="state"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
+                    <notebook colspan="4">
+                        <page string="Parameters">
+                            <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
+                                <tree string="Parameters" editable="bottom">
+                                    <field name="name" width="300"/>
+                                    <field name="value"/>
+                                </tree>
+                                <form string="Parameters">
+                                    <field name="name"/>
+                                    <field name="value"/>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>
@@ -241,6 +255,20 @@
                     <newline/>
                     <field name="state"/>
                     <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
+                    <notebook colspan="4">
+                        <page string="Parameters">
+                            <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
+                                <tree string="Parameters" editable="bottom">
+                                    <field name="name" width="300"/>
+                                    <field name="value"/>
+                                </tree>
+                                <form string="Parameters">
+                                    <field name="name"/>
+                                    <field name="value"/>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>

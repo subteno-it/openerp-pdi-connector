@@ -84,7 +84,7 @@ class PdiTransformation(osv.osv):
         'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
         'state': fields.selection(_pdi_status, 'Status'),
         'directory': fields.char('Directory', size=256),
-
+        'param_ids': fields.one2many('pdi.trans.param', 'trans_id', 'Parameters'),
     }
 
     _defaults = {
@@ -117,8 +117,11 @@ class PdiTransformation(osv.osv):
             '-pass=%s' % transf.instance_id.repo_pass,
             '-dir=%s' % transf.directory,
             '-trans=%s' % transf.name,
-            #'-listdir',
         ]
+
+        # for each param define on this transformation, add it as argument
+        for p in transf.param_ids:
+            cmd.append('-param:%s=%s' % (p.name.upper(), p.value))
 
         def thread_transformation(cr, uid, ids, cmd, path, context):
             """
@@ -149,13 +152,13 @@ class PdiTransformation(osv.osv):
             elif retcode == 3:
                 note = _('(3) Unable to prepare and initialize this transformation')
             elif retcode == 7:
-                note = _("The transformation couldn't be loaded from XML or the Repository'")
+                note = _("(7) The transformation couldn't be loaded from XML or the Repository")
             elif retcode == 8:
-                note = _('Error loading steps or plugins (error in loading one of the plugins mostly)')
+                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')
             elif retcode == 9:
-                note = _('Command line usage printing')
+                note = _('(9) Command line usage printing')
             else:
-                note = _('Unknown error %s') % retcode
+                note = _('(%s) Unknown error') % str(retcode)
 
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
@@ -179,6 +182,19 @@ class PdiTransformation(osv.osv):
 PdiTransformation()
 
 
+class PdiTransParam(osv.osv):
+    _name = 'pdi.trans.param'
+    _description = 'Parameter to launch transformation'
+
+    _columns = {
+        'name': fields.char('Name', size=64, required=True),
+        'value': fields.char('Value', size=64, required=True),
+        'trans_id': fields.many2one('pdi.transformation', 'Transformation'),
+    }
+
+PdiTransParam()
+
+
 class PdiTask(osv.osv):
     """
     Manage Task in the kettle repository
@@ -191,6 +207,7 @@ class PdiTask(osv.osv):
         'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
         'state': fields.selection(_pdi_status, 'Status', ),
         'directory': fields.char('Directory', size=256),
+        'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
     }
 
     _defaults = {
@@ -204,27 +221,30 @@ class PdiTask(osv.osv):
         if context is None:
             context = {}
 
-        transf = self.browse(cr, uid, ids[0], context=context)
+        task = self.browse(cr, uid, ids[0], context=context)
 
-        if transf.state in ('disable', 'run'):
+        if task.state in ('disable', 'run'):
             # already launched or disable
             return True
 
         self.write(cr, uid, ids, {'state': 'run'}, context=context)
 
-        pdi = root_install + '/' + transf.instance_id.version
+        pdi = root_install + '/' + task.instance_id.version
         if not os.path.exists(pdi):
             raise osv.except_osv(_('Error'), _('pdi path does not exist'))
 
         cmd = [
             '%s/kitchen.sh' % pdi,
-            '-rep=%s' % transf.instance_id.repo_name,
-            '-user=%s' % transf.instance_id.repo_user,
-            '-pass=%s' % transf.instance_id.repo_pass,
-            '-dir=%s' % transf.directory,
-            '-job=%s' % transf.name,
-            #'-listdir',
+            '-rep=%s' % task.instance_id.repo_name,
+            '-user=%s' % task.instance_id.repo_user,
+            '-pass=%s' % task.instance_id.repo_pass,
+            '-dir=%s' % task.directory,
+            '-job=%s' % task.name,
         ]
+
+        # for each param define on this task, add it as argument
+        for p in task.param_ids:
+            cmd.append('-param:%s=%s' % (p.name.upper(), p.value))
 
         def thread_task(cr, uid, ids, cmd, path, context):
             """
@@ -253,18 +273,18 @@ class PdiTask(osv.osv):
             elif retcode == 2:
                 note = _('(2) An unexpected error occurred during loading / running of the task')
             elif retcode == 7:
-                note = _("The task couldn't be loaded from XML or the Repository'")
+                note = _("(7) The task couldn't be loaded from XML or the Repository")
             elif retcode == 8:
-                note = _('Error loading steps or plugins (error in loading one of the plugins mostly)')
+                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')
             elif retcode == 9:
-                note = _('Command line usage printing')
+                note = _('(9) Command line usage printing')
             else:
-                note = _('Unknown error %s') % retcode
+                note = _('(%s) Unknown error') % str(retcode)
 
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + transf.name,
+                'name': prefix + ' ' + task.name,
                 'res_model': 'pdi.task',
                 'res_id': ids[0],
                 'description': note,
@@ -281,5 +301,18 @@ class PdiTask(osv.osv):
         return True
 
 PdiTask()
+
+
+class PdiTaskParam(osv.osv):
+    _name = 'pdi.task.param'
+    _description = 'Parameter to launch task'
+
+    _columns = {
+        'name': fields.char('Name', size=64, required=True),
+        'value': fields.char('Value', size=64, required=True),
+        'trans_id': fields.many2one('pdi.task', 'Task'),
+    }
+
+PdiTaskParam()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
