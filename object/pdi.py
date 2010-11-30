@@ -71,6 +71,15 @@ _pdi_status = [
     ('run', 'Running'),
 ]
 
+_get_level = [
+    ('Basic', 'Basic'),
+    ('Detailed', 'Detailed'),
+    ('Debug', 'Debug'),
+    ('Rowlevel', 'Rowlevel'),
+    ('Error', 'Error'),
+    ('Nothing', 'Nothing'),
+]
+
 
 class PdiTransformation(osv.osv):
     """
@@ -85,10 +94,12 @@ class PdiTransformation(osv.osv):
         'state': fields.selection(_pdi_status, 'Status'),
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.trans.param', 'trans_id', 'Parameters'),
+        'level': fields.selection(_get_level, 'Level', ),
     }
 
     _defaults = {
-         'state': lambda *a: 'stop',
+        'state': lambda *a: 'stop',
+        'level': lambda *a: 'Basic',
     }
 
     def execute_transformation(self, cr, uid, ids, context=None):
@@ -117,6 +128,7 @@ class PdiTransformation(osv.osv):
             '-pass=%s' % transf.instance_id.repo_pass,
             '-dir=%s' % transf.directory,
             '-trans=%s' % transf.name,
+            '-level=%s' % transf.level,
         ]
 
         # for each param define on this transformation, add it as argument
@@ -208,10 +220,12 @@ class PdiTask(osv.osv):
         'state': fields.selection(_pdi_status, 'Status', ),
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
+        'level': fields.selection(_get_level, 'Level', ),
     }
 
     _defaults = {
-         'state': lambda *a: 'stop',
+        'state': lambda *a: 'stop',
+        'level': lambda *a: 'Basic',
     }
 
     def execute_task(self, cr, uid, ids, context=None):
@@ -240,6 +254,7 @@ class PdiTask(osv.osv):
             '-pass=%s' % task.instance_id.repo_pass,
             '-dir=%s' % task.directory,
             '-job=%s' % task.name,
+            '-level=%s' % transf.level,
         ]
 
         # for each param define on this task, add it as argument

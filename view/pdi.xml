@@ -150,6 +150,7 @@
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
+                    <field name="level"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                 </tree>
             </field>
@@ -165,7 +166,7 @@
                     <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
-                    <newline/>
+                    <field name="level"/>
                     <field name="state"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                     <notebook colspan="4">
@@ -237,6 +238,7 @@
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state"/>
+                    <field name="level"/>
                     <button string="Launch" states="stop" type="object" name="execute_task"/>
                 </tree>
             </field>
@@ -252,7 +254,7 @@
                     <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
-                    <newline/>
+                    <field name="level"/>
                     <field name="state"/>
                     <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
                     <notebook colspan="4">
