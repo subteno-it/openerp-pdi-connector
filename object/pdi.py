@@ -188,7 +188,7 @@ class PdiTransParam(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=64, required=True),
+        'value': fields.char('Value', size=256, required=True),
         'trans_id': fields.many2one('pdi.transformation', 'Transformation'),
     }
 
@@ -309,7 +309,7 @@ class PdiTaskParam(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=64, required=True),
+        'value': fields.char('Value', size=256, required=True),
         'trans_id': fields.many2one('pdi.task', 'Task'),
     }
 
