@@ -254,7 +254,7 @@ class PdiTask(osv.osv):
             '-pass=%s' % task.instance_id.repo_pass,
             '-dir=%s' % task.directory,
             '-job=%s' % task.name,
-            '-level=%s' % transf.level,
+            '-level=%s' % task.level,
         ]
 
         # for each param define on this task, add it as argument
