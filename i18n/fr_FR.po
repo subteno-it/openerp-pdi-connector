@@ -318,7 +318,7 @@ msgstr "v4.1"
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_transformation
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_transformation_user
 msgid "PDI Transformation"
-msgstr "transformation PDI"
+msgstr "Transformation PDI"
 
 #. module: pdi_connector
 #: code:addons/pdi_connector/object/pdi.py:0
