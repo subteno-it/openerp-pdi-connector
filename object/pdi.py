@@ -129,6 +129,7 @@ class PdiTransformation(osv.osv):
             '-dir=%s' % transf.directory,
             '-trans=%s' % transf.name,
             '-level=%s' % transf.level,
+            '-param:%s=/tmp/pan-stdout-%s' % ('PDI_LOG', str(ids[0])),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -255,6 +256,7 @@ class PdiTask(osv.osv):
             '-dir=%s' % task.directory,
             '-job=%s' % task.name,
             '-level=%s' % task.level,
+            '-param:%s=/tmp/kitchen-stdout-%s' % ('PDI_LOG', str(ids[0])),
         ]
 
         # for each param define on this task, add it as argument
