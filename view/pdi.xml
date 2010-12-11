@@ -163,13 +163,14 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Transformation">
-                    <field name="instance_id" select="1"/>
                     <field name="name" select="1"/>
-                    <field name="directory" select="1"/>
-                    <field name="level"/>
-                    <field name="state" readonly="1"/>
-                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
+                    <field name="directory" select="1" required="1"/>
                     <notebook colspan="4">
+                        <page string="General">
+                            <field name="instance_id" select="1"/>
+                            <separator string="Debug information" colspan="4"/>
+                            <field name="level"/>
+                        </page>
                         <page string="Parameters">
                             <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
                                 <tree string="Parameters" editable="bottom">
@@ -183,6 +184,8 @@
                             </field>
                         </page>
                     </notebook>
+                    <field name="state" readonly="1"/>
+                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                 </form>
             </field>
         </record>
