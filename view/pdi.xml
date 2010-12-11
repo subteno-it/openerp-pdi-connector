@@ -62,13 +62,13 @@
                                 <tree string="Transformation" colors="grey:state=='stop'">
                                     <field name="name"/>
                                     <field name="directory"/>
-                                    <field name="state"/>
+                                    <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                                 </tree>
                                 <form string="Transformation">
                                     <field name="name" select="1"/>
                                     <field name="directory" select="1"/>
-                                    <field name="state"/>
+                                    <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                                 </form>
                             </field>
@@ -78,14 +78,14 @@
                                 <tree string="Task" colors="grey:state=='stop'">
                                     <field name="name"/>
                                     <field name="directory"/>
-                                    <field name="state"/>
+                                    <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_task"/>
                                 </tree>
                                 <form string="Task">
                                     <field name="name" select="1"/>
                                     <field name="directory" select="1"/>
                                     <newline/>
-                                    <field name="state"/>
+                                    <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
                                 </form>
                             </field>
@@ -149,7 +149,7 @@
                     <field name="instance_id"/>
                     <field name="name"/>
                     <field name="directory"/>
-                    <field name="state"/>
+                    <field name="state" readonly="1"/>
                     <field name="level"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                 </tree>
@@ -167,7 +167,7 @@
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
                     <field name="level"/>
-                    <field name="state"/>
+                    <field name="state" readonly="1"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
                     <notebook colspan="4">
                         <page string="Parameters">
@@ -237,7 +237,7 @@
                     <field name="instance_id"/>
                     <field name="name"/>
                     <field name="directory"/>
-                    <field name="state"/>
+                    <field name="state" readonly="1"/>
                     <field name="level"/>
                     <button string="Launch" states="stop" type="object" name="execute_task"/>
                 </tree>
@@ -255,7 +255,7 @@
                     <field name="name" select="1"/>
                     <field name="directory" select="1"/>
                     <field name="level"/>
-                    <field name="state"/>
+                    <field name="state" readonly="1"/>
                     <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
                     <notebook colspan="4">
                         <page string="Parameters">
