@@ -64,6 +64,42 @@ class PdiInstance(osv.osv):
         'repo_pass': lambda *a: 'admin',
     }
 
+    def __init__(self, pool, cr):
+        """
+        Check if import and export schema exists, if not create them
+        """
+        cr.execute("""show server_version""")
+        pg_version = cr.fetchone()[0].split('.')
+        pg_version = tuple([int(x) for x in pg_version])
+        if pg_version >= (8, 3, 0):
+            cr.execute("""SELECT count(*)
+                          FROM   pg_namespace
+                          WHERE  nspname='import'""")
+            if not cr.fetchone()[0]:
+                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Import schema have been created !')
+                cr.execute("""CREATE SCHEMA import;
+                       COMMENT ON SCHEMA import
+                       IS 'Schema use to store table for PDI treatement';""")
+
+            cr.execute("""SELECT count(*)
+                          FROM   pg_namespace
+                          WHERE  nspname='export'""")
+            if not cr.fetchone()[0]:
+                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Export schema have been created !')
+                cr.execute("""CREATE SCHEMA export;
+                       COMMENT ON SCHEMA export
+                       IS 'Schema use to store table for PDI treatement';""")
+
+            # Check if kettle schema have been created, if not log a warning
+            cr.execute("""SELECT count(*)
+                          FROM   pg_namespace
+                          WHERE  nspname='kettle'""")
+            if not cr.fetchone()[0]:
+                logger.notifyChannel('pdi_connector', netsvc.LOG_WARNING, 'Kettle schema does not exits, create it before use kettle!')
+                raise osv.except_osv(_('Error'), _('Kettle schema does not exist, create it before install this module'))
+
+        super(PdiInstance, self).__init__(pool, cr)
+
 PdiInstance()
 
 _pdi_status = [
