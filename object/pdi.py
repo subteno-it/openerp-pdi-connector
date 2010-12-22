@@ -31,6 +31,7 @@ import base64
 import thread
 import pooler
 import netsvc
+import tools
 
 logger = netsvc.Logger()
 
@@ -166,6 +167,11 @@ class PdiTransformation(osv.osv):
             '-trans=%s' % transf.name,
             '-level=%s' % transf.level,
             '-param:%s=/tmp/pan-stdout-%s' % ('PDI_LOG', str(ids[0])),
+            '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
+            '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
+            '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
+            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
+            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_password']),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -293,6 +299,11 @@ class PdiTask(osv.osv):
             '-job=%s' % task.name,
             '-level=%s' % task.level,
             '-param:%s=/tmp/kitchen-stdout-%s' % ('PDI_LOG', str(ids[0])),
+            '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
+            '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
+            '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
+            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
+            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_password']),
         ]
 
         # for each param define on this task, add it as argument
