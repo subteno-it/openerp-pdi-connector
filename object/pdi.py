@@ -132,11 +132,13 @@ class PdiTransformation(osv.osv):
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.trans.param', 'trans_id', 'Parameters'),
         'level': fields.selection(_get_level, 'Level', ),
+        'note': fields.text('Note', help='Explain the process for the user'),
     }
 
     _defaults = {
         'state': lambda *a: 'stop',
         'level': lambda *a: 'Basic',
+        'note': lambda *a: False,
     }
 
     def execute_transformation(self, cr, uid, ids, context=None):
@@ -264,11 +266,13 @@ class PdiTask(osv.osv):
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
         'level': fields.selection(_get_level, 'Level', ),
+        'note': fields.text('Note', help='Explain the process for the user'),
     }
 
     _defaults = {
         'state': lambda *a: 'stop',
         'level': lambda *a: 'Basic',
+        'note': lambda *a: False,
     }
 
     def execute_task(self, cr, uid, ids, context=None):

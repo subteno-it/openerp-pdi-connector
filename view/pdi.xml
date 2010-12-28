@@ -183,6 +183,9 @@
                                 </form>
                             </field>
                         </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1" />
+                        </page>
                     </notebook>
                     <field name="state" readonly="1"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
@@ -273,6 +276,9 @@
                                     <field name="value"/>
                                 </form>
                             </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1" />
                         </page>
                     </notebook>
                     <field name="state" readonly="1"/>
