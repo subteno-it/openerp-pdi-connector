@@ -96,8 +96,7 @@ class PdiInstance(osv.osv):
                           FROM   pg_namespace
                           WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
-                logger.notifyChannel('pdi_connector', netsvc.LOG_WARNING, 'Kettle schema does not exits, create it before use kettle!')
-                raise osv.except_osv(_('Error'), _('Kettle schema does not exist, create it before install this module'))
+                logger.notifyChannel('pdi_connector', netsvc.LOG_ERROR, 'Kettle schema does not exits, create it before use kettle!')
 
         super(PdiInstance, self).__init__(pool, cr)
 
