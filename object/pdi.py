@@ -41,7 +41,8 @@ _pdi_version = [
     ('4.1', 'v4.1'),
 ]
 
-root_install = '/opt/pdi'
+root_install = tools.config.get('pdi_path', '/opt/pdi') or ''
+logger.notifyChannel('init:module pdi_connector', netsvc.LOG_INFO, 'PDI Path: %s' % root_install)
 
 
 class PdiInstance(osv.osv):
