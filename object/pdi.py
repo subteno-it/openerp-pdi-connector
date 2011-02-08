@@ -168,7 +168,7 @@ class PdiTransformation(osv.osv):
             '-dir=%s' % transf.directory,
             '-trans=%s' % transf.name,
             '-level=%s' % transf.level,
-            '-param:%s=/tmp/pan-stdout-%s.log' % ('PDI_LOG', str(ids[0])),
+            '-param:%s=/tmp/pan-stdout-%s-%s.log' % ('PDI_LOG', cr.dbname, str(ids[0])),
             '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
             '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
             '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
@@ -187,10 +187,10 @@ class PdiTransformation(osv.osv):
             cr = pooler.get_db(cr.dbname).cursor()
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Thread start')
 
-            out_filename = '/tmp/pan-stdout-%s.log' % str(ids[0])
+            out_filename = '/tmp/pan-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
             outfp = open(out_filename, 'w')
 
-            err_filename = '/tmp/pan-stderr-%s.log' % str(ids[0])
+            err_filename = '/tmp/pan-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Call process')
             retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, cwd=path)
@@ -302,7 +302,7 @@ class PdiTask(osv.osv):
             '-dir=%s' % task.directory,
             '-job=%s' % task.name,
             '-level=%s' % task.level,
-            '-param:%s=/tmp/kitchen-stdout-%s.log' % ('PDI_LOG', str(ids[0])),
+            '-param:%s=/tmp/kitchen-stdout-%s-%s.log' % ('PDI_LOG', cr.dbname, str(ids[0])),
             '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
             '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
             '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
@@ -321,10 +321,10 @@ class PdiTask(osv.osv):
             cr = pooler.get_db(cr.dbname).cursor()
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Thread start')
 
-            out_filename = '/tmp/kitchen-stdout-%s.log' % str(ids[0])
+            out_filename = '/tmp/kitchen-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
             outfp = open(out_filename, 'w')
 
-            err_filename = '/tmp/kitchen-stderr-%s.log' % str(ids[0])
+            err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Call process')
             retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, cwd=path)
