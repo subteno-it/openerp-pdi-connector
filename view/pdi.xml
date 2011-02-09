@@ -263,6 +263,7 @@
                     <notebook colspan="4">
                         <page string="General">
                             <field name="instance_id" select="1"/>
+                            <field name="log_cmd"/>
                             <separator string="Debug information" colspan="4"/>
                             <field name="level"/>
                         </page>

@@ -274,6 +274,7 @@ class PdiTask(osv.osv):
         'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
         'level': fields.selection(_get_level, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
+        'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
     }
 
     _defaults = {
@@ -301,6 +302,7 @@ class PdiTask(osv.osv):
         if not os.path.exists(pdi):
             raise osv.except_osv(_('Error'), _('pdi path does not exist'))
 
+        ctx = context.copy()
         cmd = [
             '%s/kitchen.sh' % pdi,
             '-rep=%s' % task.instance_id.repo_name,
@@ -371,8 +373,11 @@ class PdiTask(osv.osv):
             cr.close()
             return True
 
-        logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Compose thread with %s' % ' '.join(cmd))
-        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, context))
+        if task.log_cmd:
+            logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, '(task) Compose thread with %s' % ' '.join(cmd))
+        else:
+            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Compose thread with %s' % ' '.join(cmd))
+        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, ctx))
         return True
 
 PdiTask()
