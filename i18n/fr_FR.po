@@ -5,14 +5,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-02-09 20:55:08+0000\n"
-"PO-Revision-Date: 2011-02-09 21:57+0100\n"
+"POT-Creation-Date: 2011-02-09 21:22:13+0000\n"
+"PO-Revision-Date: 2011-02-09 22:23+0100\n"
 "Last-Translator: Christophe Chauvet <christophe.chauvet@syleam.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Translate Toolkit 1.3.0\n"
+
+#. module: pdi_connector
+#: help:pdi.instance.parameters,name:0
+msgid "Name of the parameters, in upper case"
+msgstr "Nom du paramètre, en Majuscule"
 
 #. module: pdi_connector
 #: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_instance_view
@@ -33,6 +38,9 @@ msgid "Invalid model name in the action definition."
 msgstr "Nom de modèle invalide pour cette action définie"
 
 #. module: pdi_connector
+#: view:pdi.instance:0
+#: field:pdi.instance,param_ids:0
+#: view:pdi.instance.parameters:0
 #: view:pdi.task:0
 #: field:pdi.task,param_ids:0
 #: view:pdi.transformation:0
@@ -60,6 +68,7 @@ msgid "Note"
 msgstr "Note"
 
 #. module: pdi_connector
+#: field:pdi.instance.parameters,instance_id:0
 #: field:pdi.task,instance_id:0
 #: field:pdi.transformation,instance_id:0
 msgid "Instance"
@@ -171,6 +180,11 @@ msgid "Log command file as info, usefull for debugging"
 msgstr "Tracer la commande dans le journal en mode normal, utile pour le debuggage"
 
 #. module: pdi_connector
+#: help:pdi.instance.parameters,value:0
+msgid "Value of the parameter"
+msgstr "Valeur du paramètre"
+
+#. module: pdi_connector
 #: selection:pdi.task,level:0
 #: selection:pdi.transformation,level:0
 msgid "Nothing"
@@ -224,6 +238,7 @@ msgstr "PDI - ETL"
 #. module: pdi_connector
 #: field:pdi.instance,name:0
 #: field:pdi.instance,repo_name:0
+#: field:pdi.instance.parameters,name:0
 #: field:pdi.task,name:0
 #: field:pdi.task.param,name:0
 #: field:pdi.trans.param,name:0
@@ -262,6 +277,7 @@ msgid "pdi path does not exist"
 msgstr "Le chemin vers PDI n'existe pas"
 
 #. module: pdi_connector
+#: field:pdi.instance.parameters,value:0
 #: field:pdi.task.param,value:0
 #: field:pdi.trans.param,value:0
 msgid "Value"
@@ -319,6 +335,11 @@ msgstr "(2) Une erreur est apparue lors du chargement / lancement de la transfor
 #: selection:pdi.transformation,level:0
 msgid "Detailed"
 msgstr "Détaillé"
+
+#. module: pdi_connector
+#: model:ir.model,name:pdi_connector.model_pdi_instance_parameters
+msgid "Parameters for this instance"
+msgstr "Paramètres pour cette instance"
 
 #. module: pdi_connector
 #: view:pdi.instance:0

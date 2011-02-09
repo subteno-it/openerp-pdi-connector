@@ -58,6 +58,7 @@ class PdiInstance(osv.osv):
         'repo_name': fields.char('Name', size=256, help='Enter the name of the repository'),
         'repo_user': fields.char('Username', size=64, help='Enter the username for this repository'),
         'repo_pass': fields.char('Password', size=64, help='Enter the password for this repository'),
+        'param_ids': fields.one2many('pdi.instance.parameters', 'instance_id', 'Parameters'),
     }
 
     _defaults = {
@@ -102,6 +103,23 @@ class PdiInstance(osv.osv):
         super(PdiInstance, self).__init__(pool, cr)
 
 PdiInstance()
+
+
+class PdiInstanceParameters(osv.osv):
+    """
+    Add parameters for instance, and write then in ~/.kettle/kettle.properties
+    """
+    _name = 'pdi.instance.parameters'
+    _description = 'Parameters for this instance'
+
+    _columns = {
+        'instance_id': fields.many2one('pdi.instance', 'Instance'),
+        'name': fields.char('Name', size=32, help='Name of the parameters, in upper case', required=True),
+        'value': fields.char('Value', size=256, help='Value of the parameter', required=True),
+    }
+
+PdiInstanceParameters()
+
 
 _pdi_status = [
     ('stop', 'Stopped'),
