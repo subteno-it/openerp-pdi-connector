@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 5.0.15\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2010-12-01 06:12:13+0000\n"
-"PO-Revision-Date: 2010-12-01 06:12:13+0000\n"
+"POT-Creation-Date: 2011-02-09 20:55:08+0000\n"
+"PO-Revision-Date: 2011-02-09 20:55:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,8 +29,8 @@ msgid "The Object name must start with x_ and not contain any special character 
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.instance,trans_ids:0
-msgid "Transformations"
+#: constraint:ir.actions.act_window:0
+msgid "Invalid model name in the action definition."
 msgstr ""
 
 #. module: pdi_connector
@@ -42,6 +42,12 @@ msgid "Parameters"
 msgstr ""
 
 #. module: pdi_connector
+#: help:pdi.task,note:0
+#: help:pdi.transformation,note:0
+msgid "Explain the process for the user"
+msgstr ""
+
+#. module: pdi_connector
 #: code:addons/pdi_connector/object/pdi.py:0
 #, python-format
 msgid "(%s) Unknown error"
@@ -49,6 +55,8 @@ msgstr ""
 
 #. module: pdi_connector
 #: field:pdi.instance,note:0
+#: field:pdi.task,note:0
+#: field:pdi.transformation,note:0
 msgid "Note"
 msgstr ""
 
@@ -73,8 +81,9 @@ msgid "Module to manage Pentaho Data Integration\n"
 msgstr ""
 
 #. module: pdi_connector
-#: constraint:ir.actions.act_window:0
-msgid "Invalid model name in the action definition."
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "Debug information"
 msgstr ""
 
 #. module: pdi_connector
@@ -96,6 +105,11 @@ msgid "Transformation"
 msgstr ""
 
 #. module: pdi_connector
+#: field:pdi.instance,trans_ids:0
+msgid "Transformations"
+msgstr ""
+
+#. module: pdi_connector
 #: field:pdi.task,state:0
 #: field:pdi.transformation,state:0
 msgid "Status"
@@ -111,6 +125,12 @@ msgstr ""
 #: code:addons/pdi_connector/object/pdi.py:0
 #, python-format
 msgid "(2) An unexpected error occurred during loading / running of the task"
+msgstr ""
+
+#. module: pdi_connector
+#: field:pdi.task,log_cmd:0
+#: field:pdi.transformation,log_cmd:0
+msgid "Log Command"
 msgstr ""
 
 #. module: pdi_connector
@@ -142,8 +162,9 @@ msgid "Running"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.model,name:pdi_connector.model_pdi_transformation
-msgid "Transformation of a PDI instance"
+#: help:pdi.task,log_cmd:0
+#: help:pdi.transformation,log_cmd:0
+msgid "Log command file as info, usefull for debugging"
 msgstr ""
 
 #. module: pdi_connector
@@ -170,6 +191,8 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
 msgid "Notes"
 msgstr ""
 
@@ -245,6 +268,11 @@ msgstr ""
 #: code:addons/pdi_connector/object/pdi.py:0
 #, python-format
 msgid "(9) Command line usage printing"
+msgstr ""
+
+#. module: pdi_connector
+#: model:ir.model,name:pdi_connector.model_pdi_transformation
+msgid "Transformation of a PDI instance"
 msgstr ""
 
 #. module: pdi_connector
@@ -325,6 +353,8 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
 msgid "General"
 msgstr ""
 

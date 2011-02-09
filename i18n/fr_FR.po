@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2010-12-01 06:12:13+0000\n"
-"PO-Revision-Date: 2010-12-01 07:27+0100\n"
+"POT-Creation-Date: 2011-02-09 20:55:08+0000\n"
+"PO-Revision-Date: 2011-02-09 21:57+0100\n"
 "Last-Translator: Christophe Chauvet <christophe.chauvet@syleam.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,9 +28,9 @@ msgid "The Object name must start with x_ and not contain any special character 
 msgstr "Le nom de l'objet ne doit pas commencer oar x_ et ne pas contenir de caractère spéciaux !"
 
 #. module: pdi_connector
-#: field:pdi.instance,trans_ids:0
-msgid "Transformations"
-msgstr "Transformations"
+#: constraint:ir.actions.act_window:0
+msgid "Invalid model name in the action definition."
+msgstr "Nom de modèle invalide pour cette action définie"
 
 #. module: pdi_connector
 #: view:pdi.task:0
@@ -41,6 +41,12 @@ msgid "Parameters"
 msgstr "Paramètres"
 
 #. module: pdi_connector
+#: help:pdi.task,note:0
+#: help:pdi.transformation,note:0
+msgid "Explain the process for the user"
+msgstr "Expliquer le processus à l'utilisateur"
+
+#. module: pdi_connector
 #: code:addons/pdi_connector/object/pdi.py:0
 #, python-format
 msgid "(%s) Unknown error"
@@ -48,6 +54,8 @@ msgstr "(%s) Erreur inconnue"
 
 #. module: pdi_connector
 #: field:pdi.instance,note:0
+#: field:pdi.task,note:0
+#: field:pdi.transformation,note:0
 msgid "Note"
 msgstr "Note"
 
@@ -76,9 +84,10 @@ msgstr ""
 "    - Planifie une tâche\n"
 
 #. module: pdi_connector
-#: constraint:ir.actions.act_window:0
-msgid "Invalid model name in the action definition."
-msgstr "Nom de modèle invalide pour cette action définie"
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "Debug information"
+msgstr "Information de debuggage"
 
 #. module: pdi_connector
 #: selection:pdi.task,level:0
@@ -99,6 +108,11 @@ msgid "Transformation"
 msgstr "Transformation"
 
 #. module: pdi_connector
+#: field:pdi.instance,trans_ids:0
+msgid "Transformations"
+msgstr "Transformations"
+
+#. module: pdi_connector
 #: field:pdi.task,state:0
 #: field:pdi.transformation,state:0
 msgid "Status"
@@ -115,6 +129,12 @@ msgstr "(1) Une erreur est apparu lors du processus"
 #, python-format
 msgid "(2) An unexpected error occurred during loading / running of the task"
 msgstr "(2) Une erreur est apparu lors du chargement / lancement de la tâche"
+
+#. module: pdi_connector
+#: field:pdi.task,log_cmd:0
+#: field:pdi.transformation,log_cmd:0
+msgid "Log Command"
+msgstr "Tracer la commande"
 
 #. module: pdi_connector
 #: code:addons/pdi_connector/object/pdi.py:0
@@ -145,9 +165,10 @@ msgid "Running"
 msgstr "En cours d'exécution"
 
 #. module: pdi_connector
-#: model:ir.model,name:pdi_connector.model_pdi_transformation
-msgid "Transformation of a PDI instance"
-msgstr "Tâche d'un instance PDI"
+#: help:pdi.task,log_cmd:0
+#: help:pdi.transformation,log_cmd:0
+msgid "Log command file as info, usefull for debugging"
+msgstr "Tracer la commande dans le journal en mode normal, utile pour le debuggage"
 
 #. module: pdi_connector
 #: selection:pdi.task,level:0
@@ -173,6 +194,8 @@ msgstr "Mot de passe"
 
 #. module: pdi_connector
 #: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
 msgid "Notes"
 msgstr "Notes"
 
@@ -249,6 +272,11 @@ msgstr "Valeur"
 #, python-format
 msgid "(9) Command line usage printing"
 msgstr "(9) Impression des informations de ligne de commande"
+
+#. module: pdi_connector
+#: model:ir.model,name:pdi_connector.model_pdi_transformation
+msgid "Transformation of a PDI instance"
+msgstr "Tâche d'un instance PDI"
 
 #. module: pdi_connector
 #: selection:pdi.task,state:0
@@ -328,6 +356,8 @@ msgstr "(8) Erreur lors du chargement de l'étapes ou du plugin (erreur au charg
 
 #. module: pdi_connector
 #: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
 msgid "General"
 msgstr "Général"
 
