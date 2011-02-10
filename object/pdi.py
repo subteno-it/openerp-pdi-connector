@@ -44,6 +44,12 @@ _pdi_version = [
 root_install = tools.config.get('pdi_path', '/opt/pdi') or ''
 logger.notifyChannel('init:module pdi_connector', netsvc.LOG_INFO, 'PDI Path: %s' % root_install)
 
+try:
+    import getpass
+    username = getpass.getuser()
+except:
+    username = 'openerp'
+
 
 class PdiInstance(osv.osv):
     _name = 'pdi.instance'
@@ -198,8 +204,13 @@ class PdiTransformation(osv.osv):
         ]
 
         # for each param define on this transformation, add it as argument
+        d_par = {
+            'dbname': cr.dbname,
+            'uid': uid,
+            'username': username,
+        }
         for p in transf.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % {'dbname': cr.dbname, 'uid': uid}))
+            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
 
         def thread_transformation(cr, uid, ids, cmd, path, context):
             """
@@ -338,8 +349,13 @@ class PdiTask(osv.osv):
         ]
 
         # for each param define on this task, add it as argument
+        d_par = {
+            'dbname': cr.dbname,
+            'uid': uid,
+            'username': username,
+        }
         for p in task.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % {'dbname': cr.dbname, 'uid': uid}))
+            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
 
         def thread_task(cr, uid, ids, cmd, path, context):
             """

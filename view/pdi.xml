@@ -216,12 +216,15 @@
                                 </form>
                             </field>
                             <separator string="Legend" colspan="4"/>
-                            <group colspan="4">
+                            <group colspan="4" col="6">
                                 <group colspan="2" col="2">
                                     <label string="%%(dbname)s : for database name" align="0.0"/>
                                 </group>
                                 <group colspan="2" col="2">
                                     <label string="%%(uid)s : for id of username" align="0.0"/>
+                                </group>
+                                <group colspan="2" col="2">
+                                    <label string="%%(username)s : name of the session user" align="0.0"/>
                                 </group>
                             </group>
                         </page>
@@ -320,12 +323,15 @@
                                 </form>
                             </field>
                             <separator string="Legend" colspan="4"/>
-                            <group colspan="4">
+                            <group colspan="4" col="6">
                                 <group colspan="2" col="2">
                                     <label string="%%(dbname)s : for database name" align="0.0"/>
                                 </group>
                                 <group colspan="2" col="2">
                                     <label string="%%(uid)s : for id of username" align="0.0"/>
+                                </group>
+                                <group colspan="2" col="2">
+                                    <label string="%%(username)s : name of the session user" align="0.0"/>
                                 </group>
                             </group>
                         </page>
