@@ -206,6 +206,7 @@ class PdiTransformation(osv.osv):
         # for each param define on this transformation, add it as argument
         d_par = {
             'dbname': cr.dbname,
+            'dbuser': tools.config['db_user'],
             'uid': uid,
             'username': username,
         }
@@ -351,6 +352,7 @@ class PdiTask(osv.osv):
         # for each param define on this task, add it as argument
         d_par = {
             'dbname': cr.dbname,
+            'dbuser': tools.config['db_user'],
             'uid': uid,
             'username': username,
         }
