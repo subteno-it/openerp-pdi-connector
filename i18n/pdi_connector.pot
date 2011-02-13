@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 5.0.15\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-02-09 21:22:13+0000\n"
-"PO-Revision-Date: 2011-02-09 21:22:13+0000\n"
+"POT-Creation-Date: 2011-02-13 17:07:24+0000\n"
+"PO-Revision-Date: 2011-02-13 17:07:24+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,8 +34,9 @@ msgid "The Object name must start with x_ and not contain any special character 
 msgstr ""
 
 #. module: pdi_connector
-#: constraint:ir.actions.act_window:0
-msgid "Invalid model name in the action definition."
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "Debug information"
 msgstr ""
 
 #. module: pdi_connector
@@ -62,6 +63,11 @@ msgid "(%s) Unknown error"
 msgstr ""
 
 #. module: pdi_connector
+#: constraint:ir.ui.view:0
+msgid "Invalid XML for View Architecture!"
+msgstr ""
+
+#. module: pdi_connector
 #: field:pdi.instance,note:0
 #: field:pdi.task,note:0
 #: field:pdi.transformation,note:0
@@ -69,10 +75,9 @@ msgid "Note"
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.instance.parameters,instance_id:0
-#: field:pdi.task,instance_id:0
-#: field:pdi.transformation,instance_id:0
-msgid "Instance"
+#: selection:pdi.task,level:0
+#: selection:pdi.transformation,level:0
+msgid "Debug"
 msgstr ""
 
 #. module: pdi_connector
@@ -92,7 +97,7 @@ msgstr ""
 #. module: pdi_connector
 #: view:pdi.task:0
 #: view:pdi.transformation:0
-msgid "Debug information"
+msgid "%(username)s : name of the session user"
 msgstr ""
 
 #. module: pdi_connector
@@ -102,8 +107,13 @@ msgid "Basic"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.instance:0
-msgid "Repository information"
+#: help:pdi.instance,username:0
+msgid "OpenERP User to connect tools with XMLRPC or NETRPC"
+msgstr ""
+
+#. module: pdi_connector
+#: constraint:ir.actions.act_window:0
+msgid "Invalid model name in the action definition."
 msgstr ""
 
 #. module: pdi_connector
@@ -199,25 +209,38 @@ msgid "PDI Configuration"
 msgstr ""
 
 #. module: pdi_connector
+#: field:pdi.instance,password:0
 #: field:pdi.instance,repo_pass:0
 msgid "Password"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.instance:0
 #: view:pdi.task:0
 #: view:pdi.transformation:0
-msgid "Notes"
+msgid "Legend"
+msgstr ""
+
+#. module: pdi_connector
+#: view:pdi.instance:0
+msgid "OpenERP for external integration"
+msgstr ""
+
+#. module: pdi_connector
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "%(dbuser)s : for database username"
 msgstr ""
 
 #. module: pdi_connector
 #: field:pdi.instance,repo_user:0
+#: field:pdi.instance,username:0
 msgid "Username"
 msgstr ""
 
 #. module: pdi_connector
-#: constraint:ir.ui.view:0
-msgid "Invalid XML for View Architecture!"
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "%(uid)s : for id of username"
 msgstr ""
 
 #. module: pdi_connector
@@ -257,9 +280,8 @@ msgid "Launch"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.task,level:0
-#: selection:pdi.transformation,level:0
-msgid "Debug"
+#: help:pdi.instance,password:0
+msgid "Password for the OpenERP User"
 msgstr ""
 
 #. module: pdi_connector
@@ -292,9 +314,10 @@ msgid "Transformation of a PDI instance"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.task,state:0
-#: selection:pdi.transformation,state:0
-msgid "Stopped"
+#: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "Notes"
 msgstr ""
 
 #. module: pdi_connector
@@ -355,6 +378,13 @@ msgid "v3.2"
 msgstr ""
 
 #. module: pdi_connector
+#: field:pdi.instance.parameters,instance_id:0
+#: field:pdi.task,instance_id:0
+#: field:pdi.transformation,instance_id:0
+msgid "Instance"
+msgstr ""
+
+#. module: pdi_connector
 #: selection:pdi.instance,version:0
 msgid "v4.1"
 msgstr ""
@@ -394,6 +424,23 @@ msgstr ""
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_task
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_task_user
 msgid "PDI Task"
+msgstr ""
+
+#. module: pdi_connector
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "%(dbname)s : for database name"
+msgstr ""
+
+#. module: pdi_connector
+#: view:pdi.instance:0
+msgid "Repository information"
+msgstr ""
+
+#. module: pdi_connector
+#: selection:pdi.task,state:0
+#: selection:pdi.transformation,state:0
+msgid "Stopped"
 msgstr ""
 
 #. module: pdi_connector

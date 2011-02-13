@@ -65,6 +65,8 @@ class PdiInstance(osv.osv):
         'repo_user': fields.char('Username', size=64, help='Enter the username for this repository'),
         'repo_pass': fields.char('Password', size=64, help='Enter the password for this repository'),
         'param_ids': fields.one2many('pdi.instance.parameters', 'instance_id', 'Parameters'),
+        'username': fields.char('Username', size=64, help='OpenERP User to connect tools with XMLRPC or NETRPC'),
+        'password': fields.char('Password', size=64, help='Password for the OpenERP User'),
     }
 
     _defaults = {
@@ -202,6 +204,8 @@ class PdiTransformation(osv.osv):
             '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
             '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
             '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
+            '-param:%s=%s' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
+            '-param:%s=%s' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -349,6 +353,8 @@ class PdiTask(osv.osv):
             '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
             '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
             '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
+            '-param:%s=%s' % ('OERP_USERNAME', task.instance_id.username or 'admin'),
+            '-param:%s=%s' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),
         ]
 
         # for each param define on this task, add it as argument

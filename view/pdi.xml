@@ -55,7 +55,10 @@
                             <separator string="Repository information" colspan="4"/>
                             <field name="repo_name" colspan="4"/>
                             <field name="repo_user"/>
-                            <field name="repo_pass"/>
+                            <field name="repo_pass" password="True"/>
+                            <separator string="OpenERP for external integration" colspan="4"/>
+                            <field name="username"/>
+                            <field name="password" password="True"/>
                         </page>
                         <page string="Transformation">
                             <field name="trans_ids" nolabel="1" mode="tree,form">
