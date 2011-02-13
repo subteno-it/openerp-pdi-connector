@@ -201,6 +201,7 @@ class PdiTransformation(osv.osv):
             '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
             '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
             '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
+            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -347,6 +348,7 @@ class PdiTask(osv.osv):
             '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
             '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
             '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
+            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
         ]
 
         # for each param define on this task, add it as argument
