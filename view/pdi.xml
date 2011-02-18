@@ -206,6 +206,7 @@
                             <field name="log_cmd"/>
                             <separator string="Debug information" colspan="4"/>
                             <field name="level"/>
+                            <field name="memory"/>
                         </page>
                         <page string="Parameters">
                             <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
