@@ -196,8 +196,6 @@ class PdiTransformation(osv.osv):
             env = os.environ.copy()
             env['JAVAMAXMEM'] = str(transf.memory)
 
-        print env
-
         ctx = context.copy()
         cmd = [
             '%s/pan.sh' % pdi,
@@ -320,12 +318,14 @@ class PdiTask(osv.osv):
         'level': fields.selection(_get_level, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
         'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
+        'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
     }
 
     _defaults = {
         'state': lambda *a: 'stop',
         'level': lambda *a: 'Basic',
         'note': lambda *a: False,
+        'memory': lambda *a: 0,
     }
 
     def execute_task(self, cr, uid, ids, context=None):
@@ -346,6 +346,12 @@ class PdiTask(osv.osv):
         pdi = root_install + '/' + task.instance_id.version
         if not os.path.exists(pdi):
             raise osv.except_osv(_('Error'), _('pdi path does not exist'))
+
+        # If there is a custom memory parameter to launch pan, pass it to the command line
+        env = None
+        if task.memory:
+            env = os.environ.copy()
+            env['JAVAMAXMEM'] = str(task.memory)
 
         ctx = context.copy()
         cmd = [
@@ -377,7 +383,7 @@ class PdiTask(osv.osv):
         for p in task.param_ids:
             cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
 
-        def thread_task(cr, uid, ids, cmd, path, context):
+        def thread_task(cr, uid, ids, cmd, path, env=None, context=None):
             """
             Execute the transformation in a thread
             """
@@ -390,7 +396,7 @@ class PdiTask(osv.osv):
             err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Call process')
-            retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, cwd=path)
+            retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, env=env, cwd=path)
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
@@ -431,7 +437,7 @@ class PdiTask(osv.osv):
             logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, '(task) Compose thread with %s' % ' '.join(cmd))
         else:
             logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Compose thread with %s' % ' '.join(cmd))
-        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, ctx))
+        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, env, ctx))
         return True
 
 PdiTask()
