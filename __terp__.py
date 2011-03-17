@@ -34,7 +34,6 @@
     'website': 'http://www.syleam.fr/',
     'depends': [
         'base',
-        'import_export',
     ],
     'init_xml': [],
     'update_xml': [
