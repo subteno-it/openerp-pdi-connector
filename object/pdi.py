@@ -39,6 +39,7 @@ _pdi_version = [
     ('3.2', 'v3.2'),
     ('4.0', 'v4.0'),
     ('4.1', 'v4.1'),
+    ('4.2', 'v4.2'),
 ]
 
 root_install = tools.config.get('pdi_path', '/opt/pdi') or ''
