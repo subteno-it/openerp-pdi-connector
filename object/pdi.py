@@ -32,6 +32,7 @@ import thread
 import pooler
 import netsvc
 import tools
+import time
 
 logger = netsvc.Logger()
 
@@ -108,6 +109,10 @@ class PdiInstance(osv.osv):
                           WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
                 logger.notifyChannel('pdi_connector', netsvc.LOG_ERROR, 'Kettle schema does not exits, create it before use kettle!')
+
+            # check if superuser exists
+            cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
+
 
         super(PdiInstance, self).__init__(pool, cr)
 
@@ -267,7 +272,7 @@ class PdiTransformation(osv.osv):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + transf.name,
+                'name': prefix + ' ' + transf.name + ' [' +  time.strftime('%Y%m%d%H%M%S') + ']',
                 'res_model': 'pdi.transformation',
                 'res_id': ids[0],
                 'description': note,
@@ -422,7 +427,7 @@ class PdiTask(osv.osv):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + task.name,
+                'name': prefix + ' ' + task.name + ' [' +  time.strftime('%Y%m%d%H%M%S') + ']',
                 'res_model': 'pdi.task',
                 'res_id': ids[0],
                 'description': note,
