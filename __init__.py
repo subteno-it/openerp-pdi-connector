@@ -23,7 +23,7 @@
 ##############################################################################
 
 
-import object
+import pdi
 import report
 import wizard
 

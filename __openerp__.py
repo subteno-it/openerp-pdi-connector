@@ -24,8 +24,8 @@
 
 {
     'name': 'PDI Connector',
-    'version': '1.3.1',
-    'category': 'Custom',
+    'version': '1.4',
+    'category': 'Tools',
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
     - Schedule a task
@@ -48,7 +48,7 @@
     'demo_xml': [],
     'installable': True,
     'active': False,
-    'license': 'GPL-3',
+    'license': 'AGPL-3',
 }
 
 
