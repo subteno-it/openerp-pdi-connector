@@ -30,11 +30,12 @@ import os
 import base64
 import thread
 import pooler
-import netsvc
 import tools
 import time
+import logging
 
-logger = netsvc.Logger()
+_logger = logging.getLogger('pdi_connector')
+
 
 _pdi_version = [
     ('3.2', 'v3.2'),
@@ -44,7 +45,7 @@ _pdi_version = [
 ]
 
 root_install = tools.config.get('pdi_path', '/opt/pdi') or ''
-logger.notifyChannel('init:module pdi_connector', netsvc.LOG_INFO, 'PDI Path: %s' % root_install)
+_logger.info('PDI Path: %s' % root_install)
 
 try:
     import getpass
@@ -58,8 +59,8 @@ class PdiInstance(osv.osv):
     _description = 'Instance of PDI server'
 
     _columns = {
-        'name': fields.char('Name', size=64, ),
-        'version': fields.selection(_pdi_version, 'Version', ),
+        'name': fields.char('Name', size=64, required=True),
+        'version': fields.selection(_pdi_version, 'Version', required=True,),
         'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
         'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
         'note': fields.text('Note', ),
@@ -89,7 +90,7 @@ class PdiInstance(osv.osv):
                           FROM   pg_namespace
                           WHERE  nspname='import'""")
             if not cr.fetchone()[0]:
-                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Import schema have been created !')
+                _logger.info('Import schema have been created !')
                 cr.execute("""CREATE SCHEMA import;
                        COMMENT ON SCHEMA import
                        IS 'Schema use to store table for PDI treatement';""")
@@ -98,7 +99,7 @@ class PdiInstance(osv.osv):
                           FROM   pg_namespace
                           WHERE  nspname='export'""")
             if not cr.fetchone()[0]:
-                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Export schema have been created !')
+                _logger.info('Export schema have been created !')
                 cr.execute("""CREATE SCHEMA export;
                        COMMENT ON SCHEMA export
                        IS 'Schema use to store table for PDI treatement';""")
@@ -108,7 +109,7 @@ class PdiInstance(osv.osv):
                           FROM   pg_namespace
                           WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
-                logger.notifyChannel('pdi_connector', netsvc.LOG_ERROR, 'Kettle schema does not exits, create it before use kettle!')
+                _logger.info('Kettle schema does not exits, create it before use kettle!')
 
             # check if superuser exists
             cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
@@ -237,16 +238,16 @@ class PdiTransformation(osv.osv):
             Execute the transformation in a thread
             """
             cr = pooler.get_db(cr.dbname).cursor()
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Thread start')
+            _logger.debug('(trans) Thread start')
 
             out_filename = '/tmp/pan-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
             outfp = open(out_filename, 'w')
 
             err_filename = '/tmp/pan-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Call process')
+            _logger.debug('(trans) Call process')
             retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, env=env, cwd=path)
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) End call process (return code: %s)' % str(retcode))
+            _logger.debug('(trans) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
 
@@ -285,9 +286,9 @@ class PdiTransformation(osv.osv):
             return True
 
         if transf.log_cmd:
-            logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, '(trans) Compose thread with %s' % ' '.join(cmd))
+            _logger.info('(trans) Compose thread with %s' % ' '.join(cmd))
         else:
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(trans) Compose thread with %s' % ' '.join(cmd))
+            _logger.debug('(trans) Compose thread with %s' % ' '.join(cmd))
 
         thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, env, ctx))
         return True
@@ -394,16 +395,16 @@ class PdiTask(osv.osv):
             Execute the transformation in a thread
             """
             cr = pooler.get_db(cr.dbname).cursor()
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Thread start')
+            _logger.debug('(task) Thread start')
 
             out_filename = '/tmp/kitchen-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
             outfp = open(out_filename, 'w')
 
             err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Call process')
+            _logger.debug('(task) Call process')
             retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, env=env, cwd=path)
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) End call process (return code: %s)' % str(retcode))
+            _logger.debug('(task) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
 
@@ -440,9 +441,9 @@ class PdiTask(osv.osv):
             return True
 
         if task.log_cmd:
-            logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, '(task) Compose thread with %s' % ' '.join(cmd))
+            _logger.info('(task) Compose thread with %s' % ' '.join(cmd))
         else:
-            logger.notifyChannel('pdi_connector', netsvc.LOG_DEBUG, '(task) Compose thread with %s' % ' '.join(cmd))
+            _logger.debug('(task) Compose thread with %s' % ' '.join(cmd))
         thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, env, ctx))
         return True
 
