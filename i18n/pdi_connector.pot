@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 5.0.15\n"
+"Project-Id-Version: OpenERP Server 6.0.2\n"
 "Report-Msgid-Bugs-To: support@openerp.com\n"
-"POT-Creation-Date: 2011-02-13 17:07:24+0000\n"
-"PO-Revision-Date: 2011-02-13 17:07:24+0000\n"
+"POT-Creation-Date: 2011-08-01 20:20+0000\n"
+"PO-Revision-Date: 2011-08-01 20:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,16 +21,18 @@ msgid "Name of the parameters, in upper case"
 msgstr ""
 
 #. module: pdi_connector
+#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_task_view
+#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task
+#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task_user
+msgid "PDI Task"
+msgstr ""
+
+#. module: pdi_connector
 #: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_instance_view
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_instance
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_instance_user
 #: view:pdi.instance:0
 msgid "PDI Instance"
-msgstr ""
-
-#. module: pdi_connector
-#: constraint:ir.model:0
-msgid "The Object name must start with x_ and not contain any special character !"
 msgstr ""
 
 #. module: pdi_connector
@@ -57,14 +59,10 @@ msgid "Explain the process for the user"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:271
+#: code:addons/pdi_connector/pdi.py:426
 #, python-format
 msgid "(%s) Unknown error"
-msgstr ""
-
-#. module: pdi_connector
-#: constraint:ir.ui.view:0
-msgid "Invalid XML for View Architecture!"
 msgstr ""
 
 #. module: pdi_connector
@@ -81,7 +79,7 @@ msgid "Debug"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:420
 #, python-format
 msgid "(7) The task couldn't be loaded from XML or the Repository"
 msgstr ""
@@ -96,7 +94,6 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.task:0
-#: view:pdi.transformation:0
 msgid "%(username)s : name of the session user"
 msgstr ""
 
@@ -112,8 +109,8 @@ msgid "OpenERP User to connect tools with XMLRPC or NETRPC"
 msgstr ""
 
 #. module: pdi_connector
-#: constraint:ir.actions.act_window:0
-msgid "Invalid model name in the action definition."
+#: selection:pdi.instance,version:0
+msgid "v3.2"
 msgstr ""
 
 #. module: pdi_connector
@@ -135,13 +132,14 @@ msgid "Status"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:259
+#: code:addons/pdi_connector/pdi.py:416
 #, python-format
 msgid "(1) Errors occurred during processing"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:418
 #, python-format
 msgid "(2) An unexpected error occurred during loading / running of the task"
 msgstr ""
@@ -153,7 +151,7 @@ msgid "Log Command"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:263
 #, python-format
 msgid "(3) Unable to prepare and initialize this transformation"
 msgstr ""
@@ -162,6 +160,11 @@ msgstr ""
 #: field:pdi.task,level:0
 #: field:pdi.transformation,level:0
 msgid "Level"
+msgstr ""
+
+#. module: pdi_connector
+#: selection:pdi.instance,version:0
+msgid "v4.2"
 msgstr ""
 
 #. module: pdi_connector
@@ -198,7 +201,7 @@ msgid "Nothing"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:265
 #, python-format
 msgid "(7) The transformation couldn't be loaded from XML or the Repository"
 msgstr ""
@@ -216,7 +219,6 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.task:0
-#: view:pdi.transformation:0
 msgid "Legend"
 msgstr ""
 
@@ -227,7 +229,6 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.task:0
-#: view:pdi.transformation:0
 msgid "%(dbuser)s : for database username"
 msgstr ""
 
@@ -239,7 +240,6 @@ msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.task:0
-#: view:pdi.transformation:0
 msgid "%(uid)s : for id of username"
 msgstr ""
 
@@ -290,7 +290,8 @@ msgid "Enter the username for this repository"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:198
+#: code:addons/pdi_connector/pdi.py:355
 #, python-format
 msgid "pdi path does not exist"
 msgstr ""
@@ -303,7 +304,8 @@ msgid "Value"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:269
+#: code:addons/pdi_connector/pdi.py:424
 #, python-format
 msgid "(9) Command line usage printing"
 msgstr ""
@@ -326,7 +328,8 @@ msgid "PDI Connector"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:198
+#: code:addons/pdi_connector/pdi.py:355
 #: selection:pdi.task,level:0
 #: selection:pdi.transformation,level:0
 #, python-format
@@ -345,7 +348,7 @@ msgid "Task of a PDI instance"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:261
 #, python-format
 msgid "(2) An unexpected error occurred during loading / running of the transformation"
 msgstr ""
@@ -373,8 +376,9 @@ msgid "Instance of PDI server"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.instance,version:0
-msgid "v3.2"
+#: help:pdi.task,memory:0
+#: help:pdi.transformation,memory:0
+msgid "Custom memory to launch this treament, if 0 use standard"
 msgstr ""
 
 #. module: pdi_connector
@@ -397,7 +401,8 @@ msgid "PDI Transformation"
 msgstr ""
 
 #. module: pdi_connector
-#: code:addons/pdi_connector/object/pdi.py:0
+#: code:addons/pdi_connector/pdi.py:267
+#: code:addons/pdi_connector/pdi.py:422
 #, python-format
 msgid "(8) Error loading steps or plugins (error in loading one of the plugins mostly)"
 msgstr ""
@@ -420,15 +425,13 @@ msgid "Version"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_task_view
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task_user
-msgid "PDI Task"
+#: field:pdi.task,memory:0
+#: field:pdi.transformation,memory:0
+msgid "Memory"
 msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.task:0
-#: view:pdi.transformation:0
 msgid "%(dbname)s : for database name"
 msgstr ""
 
