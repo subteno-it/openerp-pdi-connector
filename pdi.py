@@ -221,6 +221,10 @@ class PdiTransformation(osv.osv):
             '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),
             '"-param:%s=%s"' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
             '"-param:%s=%s"' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
+            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),
+            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),
+            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),
+            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -378,6 +382,10 @@ class PdiTask(osv.osv):
             '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),
             '"-param:%s=%s"' % ('OERP_USERNAME', task.instance_id.username or 'admin'),
             '"-param:%s=%s"' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),
+            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),
+            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),
+            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),
+            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),
         ]
 
         # for each param define on this task, add it as argument
