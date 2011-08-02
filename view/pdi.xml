@@ -308,7 +308,7 @@
             <field name="arch" type="xml">
                 <form string="Task">
                     <field name="name" select="1"/>
-                    <field name="directory" select="1" readonly="1"/>
+                    <field name="directory" select="1" required="1"/>
                     <notebook colspan="4">
                         <page string="General">
                             <field name="instance_id" select="1"/>
