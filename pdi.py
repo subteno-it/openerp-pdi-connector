@@ -218,7 +218,7 @@ class PdiTransformation(osv.osv):
             '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
             '-param:%s=%s' % ('OERP_DB_USER', tools.config.get('db_user', 'openerp')),
             '-param:%s=%s' % ('OERP_DB_PASS', tools.config.get('db_password', 'openerp')),
-            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port'), False) and tools.config['xmlrpc_port'] or '8069'),
+            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),
             '-param:%s=%s' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
             '-param:%s=%s' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
         ]
