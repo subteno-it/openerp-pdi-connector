@@ -231,7 +231,7 @@ class PdiTransformation(osv.osv):
             'username': username,
         }
         for p in transf.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
+            cmd.append('"-param:%s=%s"' % (p.name.upper(), p.value % d_par))
 
         def thread_transformation(cr, uid, ids, cmd, path, env=None, context=None):
             """
@@ -388,7 +388,7 @@ class PdiTask(osv.osv):
             'username': username,
         }
         for p in task.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
+            cmd.append('"-param:%s=%s"' % (p.name.upper(), p.value % d_par))
 
         def thread_task(cr, uid, ids, cmd, path, env=None, context=None):
             """
