@@ -205,21 +205,21 @@ class PdiTransformation(osv.osv):
         ctx = context.copy()
         cmd = [
             '%s/pan.sh' % pdi,
-            '-rep=%s' % transf.instance_id.repo_name,
-            '-user=%s' % transf.instance_id.repo_user,
-            '-pass=%s' % transf.instance_id.repo_pass,
-            '-dir=%s' % transf.directory,
-            '-trans=%s' % transf.name,
-            '-level=%s' % transf.level,
-            '-param:%s=/tmp/pan-stdout-%s-%s.log' % ('PDI_LOG', cr.dbname, str(ids[0])),
-            '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
-            '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
-            '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
-            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
-            '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
-            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
-            '-param:%s=%s' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
-            '-param:%s=%s' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
+            '"-rep=%s"' % transf.instance_id.repo_name,
+            '"-user=%s"' % transf.instance_id.repo_user,
+            '"-pass=%s"' % transf.instance_id.repo_pass,
+            '"-dir=%s"' % transf.directory,
+            '"-trans=%s"' % transf.name,
+            '"-level=%s"' % transf.level,
+            '"-param:%s=/tmp/pan-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),
+            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
+            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
+            '"-param:%s=%s"' % ('OERP_DB_NAME', cr.dbname),
+            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config['db_user']),
+            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config['db_password']),
+            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
+            '"-param:%s=%s"' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
+            '"-param:%s=%s"' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -230,7 +230,7 @@ class PdiTransformation(osv.osv):
             'username': username,
         }
         for p in transf.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
+            cmd.append('"-param:%s=%s"' % (p.name.upper(), p.value % d_par))
 
         def thread_transformation(cr, uid, ids, cmd, path, env=None, context=None):
             """
@@ -362,21 +362,21 @@ class PdiTask(osv.osv):
         ctx = context.copy()
         cmd = [
             '%s/kitchen.sh' % pdi,
-            '-rep=%s' % task.instance_id.repo_name,
-            '-user=%s' % task.instance_id.repo_user,
-            '-pass=%s' % task.instance_id.repo_pass,
-            '-dir=%s' % task.directory,
-            '-job=%s' % task.name,
-            '-level=%s' % task.level,
-            '-param:%s=/tmp/kitchen-stdout-%s-%s.log' % ('PDI_LOG', cr.dbname, str(ids[0])),
-            '-param:%s=%s' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
-            '-param:%s=%s' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
-            '-param:%s=%s' % ('OERP_DB_NAME', cr.dbname),
-            '-param:%s=%s' % ('OERP_DB_USER', tools.config['db_user']),
-            '-param:%s=%s' % ('OERP_DB_PASS', tools.config['db_password']),
-            '-param:%s=%s' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
-            '-param:%s=%s' % ('OERP_USERNAME', task.instance_id.username or 'admin'),
-            '-param:%s=%s' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),
+            '"-rep=%s"' % task.instance_id.repo_name,
+            '"-user=%s"' % task.instance_id.repo_user,
+            '"-pass=%s"' % task.instance_id.repo_pass,
+            '"-dir=%s"' % task.directory,
+            '"-job=%s"' % task.name,
+            '"-level=%s"' % task.level,
+            '"-param:%s=/tmp/kitchen-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),
+            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config['db_host']) and tools.config['db_host'] or 'localhost'),
+            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config['db_port']) and tools.config['db_port'] or '5432'),
+            '"-param:%s=%s"' % ('OERP_DB_NAME', cr.dbname),
+            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config['db_user']),
+            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config['db_password']),
+            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config['port']) and tools.config['port'] or '8069'),
+            '"-param:%s=%s"' % ('OERP_USERNAME', task.instance_id.username or 'admin'),
+            '"-param:%s=%s"' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),
         ]
 
         # for each param define on this task, add it as argument
@@ -387,7 +387,7 @@ class PdiTask(osv.osv):
             'username': username,
         }
         for p in task.param_ids:
-            cmd.append('-param:%s=%s' % (p.name.upper(), p.value % d_par))
+            cmd.append('"-param:%s=%s"' % (p.name.upper(), p.value % d_par))
 
         def thread_task(cr, uid, ids, cmd, path, env=None, context=None):
             """
