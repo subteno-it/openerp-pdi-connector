@@ -277,7 +277,10 @@ class PdiTransformation(osv.osv):
                 'res_id': ids[0],
                 'description': note,
             }
-            self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            try:
+                self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            except Exception, e:
+                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Error when attach file on the transformation\n%s' % str(e))
 
             self.write(cr, uid, ids, {'state': 'stop'}, context=context)
             cr.commit()
@@ -432,7 +435,10 @@ class PdiTask(osv.osv):
                 'res_id': ids[0],
                 'description': note,
             }
-            self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            try:
+                self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            except Exception, e:
+                logger.notifyChannel('pdi_connector', netsvc.LOG_INFO, 'Error when attach file on the task\n%s' % str(e))
 
             self.write(cr, uid, ids, {'state': 'stop'}, context=context)
             cr.commit()
