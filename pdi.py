@@ -117,7 +117,6 @@ class PdiInstance(osv.osv):
             # check if superuser exists
             cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
 
-
         super(PdiInstance, self).__init__(pool, cr)
 
 PdiInstance()
@@ -171,6 +170,7 @@ class PdiTransformation(osv.osv):
         'note': fields.text('Note', help='Explain the process for the user'),
         'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
         'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
+        'cron_id': fields.many2one('ir.cron', 'Cron', help='If fill, this transformation is schedule'),
     }
 
     _defaults = {
@@ -280,7 +280,7 @@ class PdiTransformation(osv.osv):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + transf.name + ' [' +  time.strftime('%Y%m%d%H%M%S') + ']',
+                'name': prefix + ' ' + transf.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']',
                 'res_model': 'pdi.transformation',
                 'res_id': ids[0],
                 'description': note,
@@ -299,6 +299,45 @@ class PdiTransformation(osv.osv):
 
         thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, env, ctx))
         return True
+
+    def run_scheduler(self, cr, uid, transformation_id=False, context=None):
+        """
+        Run a transformation launch by a scheduler
+        """
+        if not transformation_id:
+            return False
+
+        _logger.info('Launch transformation %d' % (transformation_id,))
+        return self.execute_transformation(cr, uid, [transformation_id], context=context)
+
+    def install_cron(self, cr, uid, ids, context=None):
+        """
+        When Install button is clicked, we add new entry on ir.cron
+        for this transformation
+        """
+        trs = self.browse(cr, uid, ids[0], context=context)
+        cron_id = self.pool.get('ir.cron').create(cr, uid, {
+            'name': '%s (%d)' % (trs.name, ids[0]),
+            'active': False,
+            'user_id': uid,
+            'interval_number': 1,
+            'interval_type': 'days',
+            'numbercall': -1,
+            'doall': False,
+            'model': 'pdi.transformation',
+            'function': 'run_scheduler',
+            'args': '(%d,)' % ids[0],
+        }, context=context)
+        return self.write(cr, uid, ids, {'cron_id': cron_id}, context=context)
+
+    def uninstall_cron(self, cr, uid, ids, context=None):
+        """
+        When Install button is clicked, we add new entry on ir.cron
+        for this transformation
+        """
+        trs = self.browse(cr, uid, ids[0], context=context)
+        self.pool.get('ir.cron').unlink(cr, uid, trs.cron_id.id, context=context)
+        return self.write(cr, uid, ids, {'cron_id': False}, context=context)
 
 PdiTransformation()
 
@@ -439,7 +478,7 @@ class PdiTask(osv.osv):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + task.name + ' [' +  time.strftime('%Y%m%d%H%M%S') + ']',
+                'name': prefix + ' ' + task.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']',
                 'res_model': 'pdi.task',
                 'res_id': ids[0],
                 'description': note,

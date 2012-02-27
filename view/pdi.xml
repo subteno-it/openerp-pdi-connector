@@ -187,6 +187,7 @@
                     <field name="state" readonly="1"/>
                     <field name="level"/>
                     <button string="Launch" states="stop" type="object" name="execute_transformation"/>
+                    <field name="cron_id"/>
                 </tree>
             </field>
         </record>
@@ -207,6 +208,10 @@
                             <separator string="Debug information" colspan="4"/>
                             <field name="level"/>
                             <field name="memory"/>
+                            <separator string="Scheduling" colspan="4"/>
+                            <field name="cron_id" readonly="1"/>
+                            <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}"/>
+                            <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}"/>
                         </page>
                         <page string="Parameters">
                             <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
