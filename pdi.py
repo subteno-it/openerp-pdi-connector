@@ -117,6 +117,14 @@ class PdiInstance(osv.osv):
             # check if superuser exists
             cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
 
+        # Update ir_config_parameter for using with PL/Python
+        config_obj = pool.get('ir.config_parameter')
+        user = pool.get('res.users').browse(cr, 1, 1)
+        config_obj.set_param(cr, 1, 'extlib.host', tools.config.get('netrpc_interface', 'localhost') or 'localhost')
+        config_obj.set_param(cr, 1, 'extlib.port', tools.config.get('netrpc_port', 'localhost'))
+        config_obj.set_param(cr, 1, 'extlib.user', user.login)
+        config_obj.set_param(cr, 1, 'extlib.pass', user.password)
+
         super(PdiInstance, self).__init__(pool, cr)
 
 PdiInstance()
