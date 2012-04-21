@@ -63,33 +63,33 @@
                         <page string="Transformation">
                             <field name="trans_ids" nolabel="1" mode="tree,form">
                                 <tree string="Transformation" colors="grey:state=='stop'">
+                                    <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
                                     <field name="name"/>
                                     <field name="directory"/>
                                     <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                                 </tree>
                                 <form string="Transformation">
                                     <field name="name" select="1"/>
                                     <field name="directory" select="1"/>
                                     <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
                                 </form>
                             </field>
                         </page>
                         <page string="Tasks">
                             <field name="task_ids" nolabel="1" mode="tree,form">
                                 <tree string="Task" colors="grey:state=='stop'">
+                                    <button string="Launch" states="stop" type="object" name="execute_task" icon="gtk-execute"/>
                                     <field name="name"/>
                                     <field name="directory"/>
                                     <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_task"/>
                                 </tree>
                                 <form string="Task">
                                     <field name="name" select="1"/>
                                     <field name="directory" select="1"/>
                                     <newline/>
                                     <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
+                                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
                                 </form>
                             </field>
                         </page>
@@ -185,8 +185,8 @@
                     <field name="name"/>
                     <field name="directory"/>
                     <field name="state" readonly="1"/>
+                    <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
                     <field name="level"/>
-                    <button string="Launch" states="stop" type="object" name="execute_transformation"/>
                     <field name="cron_id"/>
                 </tree>
             </field>
@@ -243,7 +243,7 @@
                         </page>
                     </notebook>
                     <field name="state" readonly="1"/>
-                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2"/>
+                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
                 </form>
             </field>
         </record>
@@ -298,9 +298,9 @@
                     <field name="instance_id"/>
                     <field name="name"/>
                     <field name="directory"/>
+                    <button string="Launch" states="stop" type="object" name="execute_task" icon="gtk-execute"/>
                     <field name="state" readonly="1"/>
                     <field name="level"/>
-                    <button string="Launch" states="stop" type="object" name="execute_task"/>
                 </tree>
             </field>
         </record>
@@ -352,7 +352,7 @@
                         </page>
                     </notebook>
                     <field name="state" readonly="1"/>
-                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2"/>
+                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
                 </form>
             </field>
         </record>
