@@ -26,7 +26,7 @@
     'name': 'PDI Connector',
     'version': '1.4',
     'category': 'Tools',
-    'complexity': "export",
+    'complexity': "expert",
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
     - Schedule a task
