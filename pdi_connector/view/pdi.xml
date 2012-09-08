@@ -129,14 +129,7 @@
         </record>
 
         <menuitem id="menu_pdi_instance"
-            parent="menu_pdi_root"
-            sequence="20"
-            action="act_open_pdi_instance_view"/>
-
-        <!-- ** add new shortcut for single user ************************* -->
-
-        <menuitem id="menu_pdi_instance_user"
-            parent="menu_pdi_userroot"
+            parent="menu_pdi_configuration_menu"
             sequence="20"
             action="act_open_pdi_instance_view"/>
 
@@ -273,14 +266,7 @@
         </record>
 
         <menuitem id="menu_pdi_transformation"
-            parent="menu_pdi_root"
-            sequence="30"
-            action="act_open_pdi_transformation_view"/>
-
-        <!-- ** add new shortcut for single user ************************* -->
-
-        <menuitem id="menu_pdi_transformation_user"
-            parent="menu_pdi_userroot"
+            parent="menu_pdi_menu"
             sequence="30"
             action="act_open_pdi_transformation_view"/>
 
@@ -382,15 +368,8 @@
         </record>
 
         <menuitem id="menu_pdi_task"
-            parent="menu_pdi_root"
+            parent="menu_pdi_menu"
             sequence="30"
-            action="act_open_pdi_task_view"/>
-
-        <!-- ** add new shortcut for single user ************************* -->
-
-        <menuitem id="menu_pdi_task_user"
-            parent="menu_pdi_userroot"
-            sequence="40"
             action="act_open_pdi_task_view"/>
 
     </data>
