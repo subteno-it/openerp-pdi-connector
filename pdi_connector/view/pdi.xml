@@ -4,7 +4,7 @@
         ##############################################################################
         #
         #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
-        #    Copyright (C) 2010 SYLEAM ([http://www.syleam.fr/])
+        #    Copyright (C) 2010-2012 SYLEAM ([http://www.syleam.fr/])
         #              Christophe CHAUVET [christophe.chauvet@syleam.fr]
         #
         #    This file is a part of pdi_connector
@@ -182,7 +182,6 @@
         <!-- ************************************************************** -->
         <!-- ** PDI Transformation **************************************** -->
         <!-- ************************************************************** -->
-
         <record id="view_pdi_transformation_tree" model="ir.ui.view">
             <field name="name">pdi.transformation.tree</field>
             <field name="model">pdi.transformation</field>
@@ -257,6 +256,26 @@
             </field>
         </record>
 
+        <record id="view_pdi_transformation_search" model="ir.ui.view">
+            <field name="name">pdi.transformation.search</field>
+            <field name="model">pdi.transformation</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <search string="Transformation">
+                    <group>
+                        <field name="name" select="True"/>
+                        <field name="directory"/>
+                        <field name="instance_id"/>
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'instance_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="act_open_pdi_transformation_view">
             <field name="name">PDI Transformation</field>
             <field name="type">ir.actions.act_window</field>
@@ -265,6 +284,7 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
+            <field name="search_view_id" ref="view_pdi_transformation_search"/>
         </record>
 
         <record model="ir.actions.act_window.view" id="act_open_pdi_transformation_view_form">
@@ -359,6 +379,26 @@
             </field>
         </record>
 
+        <record id="view_pdi_task_search" model="ir.ui.view">
+            <field name="name">pdi.task.search</field>
+            <field name="model">pdi.task</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <search string="Task">
+                    <group>
+                        <field name="name" select="True"/>
+                        <field name="directory"/>
+                        <field name="instance_id"/>
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'instance_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="act_open_pdi_task_view">
             <field name="name">PDI Task</field>
             <field name="type">ir.actions.act_window</field>
@@ -367,6 +407,7 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
+            <field name="search_view_id" ref="view_pdi_task_search"/>
         </record>
 
         <record model="ir.actions.act_window.view" id="act_open_pdi_task_view_form">
