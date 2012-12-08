@@ -120,7 +120,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="act_open_pdi_instance_view">
-            <field name="name">PDI Instance</field>
+            <field name="name">Instance</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">pdi.instance</field>
             <field name="view_type">form</field>
@@ -281,7 +281,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="act_open_pdi_transformation_view">
-            <field name="name">PDI Transformation</field>
+            <field name="name">Transformation</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">pdi.transformation</field>
             <field name="view_type">form</field>
@@ -404,7 +404,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="act_open_pdi_task_view">
-            <field name="name">PDI Task</field>
+            <field name="name">Task</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">pdi.task</field>
             <field name="view_type">form</field>
