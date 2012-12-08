@@ -24,7 +24,7 @@
 
 {
     'name': 'PDI Connector',
-    'version': '1.4',
+    'version': '1.5',
     'category': 'Tools',
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
