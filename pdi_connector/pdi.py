@@ -344,7 +344,7 @@ class PdiTransformation(osv.osv):
         for this transformation
         """
         trs = self.browse(cr, uid, ids[0], context=context)
-        self.pool.get('ir.cron').unlink(cr, uid, trs.cron_id.id, context=context)
+        self.pool.get('ir.cron').unlink(cr, uid, [trs.cron_id.id], context=context)
         return self.write(cr, uid, ids, {'cron_id': False}, context=context)
 
 PdiTransformation()
