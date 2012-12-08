@@ -112,7 +112,7 @@ class PdiInstance(osv.osv):
                           FROM   pg_namespace
                           WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
-                _logger.info('Kettle schema does not exits, create it before use kettle!')
+                _logger.warn('Kettle schema does not exits, create it before use kettle!')
 
             # check if superuser exists
             cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
