@@ -302,7 +302,7 @@
         </record>
 
         <menuitem id="menu_pdi_transformation"
-            parent="menu_pdi_menu"
+            parent="menu_pdi_configuration_menu"
             sequence="30"
             action="act_open_pdi_transformation_view"/>
 
@@ -425,7 +425,7 @@
         </record>
 
         <menuitem id="menu_pdi_task"
-            parent="menu_pdi_menu"
+            parent="menu_pdi_configuration_menu"
             sequence="30"
             action="act_open_pdi_task_view"/>
 

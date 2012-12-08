@@ -24,21 +24,8 @@
         #
         ##############################################################################
 
-        <!-- In 6.1 add PDI menu on Tools Menu -->
-        <menuitem id="menu_pdi_menu" 
-            parent="base.menu_tools"
-            sequence="20"
-            name="Pentaho Data Integration"/>
-
-        <!-- Force display configuration menu on tools -->
-        <menuitem name="Configuration" 
-            parent="base.menu_tools"
-            id="base.menu_lunch_survey_root"
-            sequence="20"
-            groups=""/>
-
         <menuitem id="menu_pdi_configuration_menu" 
-            parent="base.menu_lunch_survey_root"
+            parent="base.menu_config"
             sequence="20"
             name="Pentaho Data Integration"/>
 
