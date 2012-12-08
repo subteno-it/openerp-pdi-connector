@@ -217,9 +217,13 @@
                             <field name="level"/>
                             <field name="memory"/>
                             <separator string="Scheduling" colspan="4"/>
-                            <field name="cron_id" readonly="1"/>
-                            <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}"/>
-                            <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}"/>
+                            <group colspan="4" col="6">
+                                <field name="cron_id" readonly="1" colspan="2"/>
+                                <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}"
+                                    colspan="2"/>
+                                <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}"
+                                    colspan="2"/>
+                            </group>
                         </page>
                         <page string="Parameters">
                             <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
