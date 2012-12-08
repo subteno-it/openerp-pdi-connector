@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
-#    Copyright (C) 2010-2012 SYLEAM (<http://www.syleam.fr/>)
+#    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
 #
 #    This file is a part of pdi_connector
@@ -23,10 +23,9 @@
 ##############################################################################
 
 {
-    'name': 'PDI Connector',
+    'name': 'Pentaho Data Integration Connector',
     'version': '1.5',
     'category': 'Tools',
-    'complexity': "expert",
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
     - Schedule a task
@@ -35,6 +34,7 @@
     'website': 'http://www.syleam.fr/',
     'depends': [
         'base',
+        'web',
     ],
     'init_xml': [],
     'update_xml': [
@@ -48,9 +48,10 @@
     ],
     'demo_xml': [],
     'installable': True,
-    'auto_install': False,
     'active': False,
     'license': 'AGPL-3',
+    'application': True,
+    'complexity': "expert",
 }
 
 

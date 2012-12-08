@@ -24,6 +24,7 @@
 
 
 import pdi
+import controllers
 import report
 import wizard
 
