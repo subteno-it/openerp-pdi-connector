@@ -27,6 +27,8 @@ try:
 except ImportError:
     import web.common.http as openerpweb
 
+import werkzeug.wrappers
+
 
 class PdiImport(openerpweb.Controller):
     _cp_path = "/pdi"
@@ -37,10 +39,10 @@ class PdiImport(openerpweb.Controller):
         You can test this, with wget
         wget -q -O- http://localhost:8069/pdi/test
         """
-        return 'PDI Connector is installed\n'
+        if 'token' not in args:
+            return werkzeug.wrappers.Response('Missing token', status=400)
 
-
-
+        return werkzeug.wrappers.Response('PDI Connector is installed', status=200)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
