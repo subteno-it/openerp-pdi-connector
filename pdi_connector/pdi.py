@@ -22,9 +22,12 @@
 #
 ##############################################################################
 
-from osv import osv
-from osv import fields
-from tools.translate import _
+from openerp.osv import osv
+from openerp.osv import fields
+from openerp.tools import config
+from openerp.tools.translate import _
+from openerp.modules import get_module_path
+import openerp
 import subprocess
 import os
 import base64
@@ -107,15 +110,48 @@ class PdiInstance(osv.osv):
                        COMMENT ON SCHEMA export
                        IS 'Schema use to store table for PDI treatement';""")
 
-            # Check if kettle schema have been created, if not log a warning
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='kettle'""")
-            if not cr.fetchone()[0]:
-                _logger.warn('Kettle schema does not exits, create it before use kettle!')
+            # To continue correctly, we check if we have admin privilege in these database server
+            admin_privilege = False
+            cr.execute("""SELECT count(*) from pg_roles WHERE rolname=%s and rolcanlogin=false;""", (config.get('db_admin', 'oerpadmin'),))
+            if cr.fetchone()[0]:
+                admin_privilege = True
 
-            # check if superuser exists
-            cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
+            # Check if kettle PostgreSQL user exists, if yes:
+            pdi_user_exists = False
+            cr.execute("""SELECT count(*) from pg_roles WHERE rolname=%s and rolcanlogin=True;""", (config.get('pdi_dbuser', 'kettle'),))
+            if cr.fetchone()[0]:
+                pdi_user_exists = True
+            else:
+                # If kettle user doesn't exist, check if we have role with SUPERUSER rights
+                if admin_privilege:
+                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
+                    cr.execute("""CREATE ROLE """ + config.get('pdi_dbuser', 'kettle') + """ LOGIN ENCRYPTED PASSWORD %s
+                        NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;""", (config.get('pdi_dbpass', 'secret'),))
+
+                    cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")
+                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'Utilisateur pour pentaho data integration';""")
+                    cr.commit()
+                    pdi_user_exists = True
+
+            # Check if kettle schema have been created, if not log a warning
+            cr.execute("""SELECT count(*) FROM pg_namespace WHERE  nspname='kettle'""")
+            if not cr.fetchone()[0]:
+                if admin_privilege:
+                    _logger.warn('Kettle schema does not exits, we create it automatically')
+                    cr.execute("""CREATE SCHEMA kettle AUTHORIZATION """ + config.get('pdi_dbuser', 'kettle') + ";")
+                    cr.execute("""COMMENT ON SCHEMA kettle IS 'Schema pour Pentaho Data Integration';""")
+
+                    # After create the schema, we initialize the repository with a SQL file
+                    fct_file = openerp.tools.misc.file_open(os.path.join(get_module_path('pdi_connector'), 'sql', 'repository44.sql'))
+                    try:
+                        query = fct_file.read() % {'db_user': config.get('pdi_dbuser', 'kettle'),}
+                        cr.execute(query)
+                        cr.commit()
+                    finally:
+                        fct_file.close()
+                else:
+                    _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')
+
 
         # Update ir_config_parameter for using with PL/Python
         config_obj = pool.get('ir.config_parameter')

@@ -29,6 +29,13 @@
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
     - Schedule a task
+
+    On the configuration file add new parameters to defined:
+
+    - pdi_path: Folder where PDI is installed, default /opt/pdi
+    - pdi_dbuser: Dedicate PostgreSQL user for PDI, default 'kettle'
+    - pdi_dbpass: Password of the dedicate PostgreSQL user, default 'secret'
+
     """,
     'author': 'SYLEAM',
     'website': 'http://www.syleam.fr/',
