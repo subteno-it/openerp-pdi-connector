@@ -97,7 +97,7 @@
                             <field name="param_ids" colspan="4" nolabel="1"/>
                         </page>
                         <page string="Notes">
-                            <field name="note" nolabel="1" />
+                            <field name="note" nolabel="1" colspan="4"/>
                         </page>
                     </notebook>
                 </form>
@@ -178,7 +178,6 @@
             </field>
         </record>
 
-
         <!-- ************************************************************** -->
         <!-- ** PDI Transformation **************************************** -->
         <!-- ************************************************************** -->
@@ -236,19 +235,6 @@
                                     <field name="value"/>
                                 </form>
                             </field>
-                            <separator string="Legend" colspan="4"/>
-                            <group colspan="4" col="6">
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(dbname)s : for database name" align="0.0"/>
-                                    <label string="pourcent(dbuser)s : for database username" align="0.0"/>
-                                </group>
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(uid)s : for id of username" align="0.0"/>
-                                </group>
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(username)s : name of the session user" align="0.0"/>
-                                </group>
-                            </group>
                         </page>
                         <page string="Notes">
                             <field name="note" nolabel="1" />
@@ -359,19 +345,6 @@
                                     <field name="value"/>
                                 </form>
                             </field>
-                            <separator string="Legend" colspan="4"/>
-                            <group colspan="4" col="6">
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(dbname)s : for database name" align="0.0"/>
-                                    <label string="pourcent(dbuser)s : for database username" align="0.0"/>
-                                </group>
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(uid)s : for id of username" align="0.0"/>
-                                </group>
-                                <group colspan="2" col="2">
-                                    <label string="pourcent(username)s : name of the session user" align="0.0"/>
-                                </group>
-                            </group>
                         </page>
                         <page string="Notes">
                             <field name="note" nolabel="1" />
