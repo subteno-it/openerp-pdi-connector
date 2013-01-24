@@ -492,8 +492,19 @@ class PdiTask(osv.osv):
             'uid': uid,
             'username': username,
         }
+
+        additionnal_params = {}
+        # First we add global parameters come from INSTANCE declaration
+        for p in task.instance_id.param_ids:
+            additionnal_params[p.name.upper()] = p.value % d_par
+
+        # Add new parameters or override the global defined
         for p in task.param_ids:
-            cmd.append('"-param:%s=%s"' % (p.name.upper(), p.value % d_par))
+            additionnal_params[p.name.upper()] = p.value % d_par
+
+        # Add all new parameters on the command line
+        for k, v in additionnal_params.items():
+            cmd.append('"-param:%s=%s"' % (k, v))
 
         def thread_task(cr, uid, ids, cmd, path, env=None, context=None):
             """
