@@ -37,6 +37,7 @@ import tools
 import time
 import logging
 import tempfile
+import glob
 
 _logger = logging.getLogger('pdi_connector')
 
@@ -344,22 +345,40 @@ class PdiTransformation(osv.osv):
             else:
                 note = _('(%s) Unknown error') % str(retcode)
 
-            vals = {
-                'datas': base64.encodestring(open(out_filename, 'rb').read()),
-                'datas_fname': out_filename,
-                'name': prefix + ' ' + transf.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']',
-                'res_model': 'pdi.transformation',
-                'res_id': ids[0],
-                'description': note,
-            }
-            self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            def add_attachment(filename, title=None):
+                if title is None:
+                    title = prefix + ' ' + transf.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']'
+                else:
+                    title = prefix + ' ' + title + ' [' + time.strftime('%Y%m%d%H%M%S') + ']'
 
+                fp = open(filename, 'rb')
+                vals = {
+                    'datas': base64.encodestring(fp.read()),
+                    'datas_fname': filename,
+                    'name': title,
+                    'res_model': 'pdi.transformation',
+                    'res_id': ids[0],
+                    'description': note,
+                }
+                fp.close()
+                self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+
+            # We save the logfile
+            add_attachment(out_filename)
+
+            # For each file, we must save it as attachment
+            for tname in glob.glob(exportfiledir + '/*'):
+                add_attachment(tname, tname.split('/')[-1])
+                os.remove(tname)
+
+            # We must remove the temporary directory
+            os.removedirs(exportfiledir)
+
+            # Now we stop the transformation
             self.write(cr, uid, ids, {'state': 'stop'}, context=context)
             cr.commit()
             cr.close()
 
-            # We must remove the temporary directory
-            os.removedirs(exportfiledir)
             return True
 
         if transf.log_cmd:
