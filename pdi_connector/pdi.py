@@ -235,6 +235,10 @@ class PdiTransformation(osv.osv):
         if context is None:
             context = {}
 
+        if context.get('nopdi'):
+            _logger.info('Execute abort by nopdi in context')
+            return True
+
         transf = self.browse(cr, uid, ids[0], context=context)
 
         if transf.state in ('disable', 'run'):
@@ -453,6 +457,10 @@ class PdiTask(osv.osv):
         """
         if context is None:
             context = {}
+
+        if context.get('nopdi'):
+            _logger.info('Execute abort by nopdi in context')
+            return True
 
         task = self.browse(cr, uid, ids[0], context=context)
 
