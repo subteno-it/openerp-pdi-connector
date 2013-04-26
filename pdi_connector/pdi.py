@@ -39,6 +39,8 @@ import logging
 import tempfile
 import glob
 
+from datetime import datetime, timedelta
+
 _logger = logging.getLogger('pdi_connector')
 
 
@@ -180,7 +182,7 @@ class PdiInstanceParameters(osv.osv):
     _columns = {
         'instance_id': fields.many2one('pdi.instance', 'Instance'),
         'name': fields.char('Name', size=32, help='Name of the parameters, in upper case', required=True),
-        'value': fields.char('Value', size=256, help='Value of the parameter', required=True),
+        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available'),
     }
 
 PdiInstanceParameters()
@@ -295,14 +297,25 @@ class PdiTransformation(osv.osv):
             'username': username,
         }
 
+        def convert_param(parameter, additional_dict=None):
+            """
+            If parameter starts with [[ we evaluate the content
+            """
+            if additional_dict is None:
+                additional_dict = {}
+
+            if parameter and  parameter.startswith('[['):
+                return eval(parameter.replace('[[', '').replace(']]', ''), {'time': time, 'datetime': datetime, 'timedelta': timedelta}) or ''
+            return parameter % additional_dict
+
         additionnal_params = {}
         # First we add global parameters come from INSTANCE declaration
         for p in transf.instance_id.param_ids:
-            additionnal_params[p.name.upper()] = p.value % d_par
+            additionnal_params[p.name.upper()] = convert_param(p.value, d_par)
 
         # Add new parameters or override the global defined
         for p in transf.param_ids:
-            additionnal_params[p.name.upper()] = p.value % d_par
+            additionnal_params[p.name.upper()] = convert_param(p.value, d_par)
 
         # Add all new parameters on the command line
         for k, v in additionnal_params.items():
@@ -437,7 +450,7 @@ class PdiTransParam(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=256, required=True),
+        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available'),
         'trans_id': fields.many2one('pdi.transformation', 'Transformation'),
     }
 
@@ -531,14 +544,25 @@ class PdiTask(osv.osv):
             'username': username,
         }
 
+        def convert_param(parameter, additional_dict=None):
+            """
+            If parameter starts with [[ we evaluate the content
+            """
+            if additional_dict is None:
+                additional_dict = {}
+
+            if parameter and  parameter.startswith('[['):
+                return eval(parameter.replace('[[', '').replace(']]', ''), {'time': time, 'datetime': datetime, 'timedelta': timedelta}) or ''
+            return parameter % additional_dict
+
         additionnal_params = {}
         # First we add global parameters come from INSTANCE declaration
         for p in task.instance_id.param_ids:
-            additionnal_params[p.name.upper()] = p.value % d_par
+            additionnal_params[p.name.upper()] = convert_param(p.value, d_par)
 
         # Add new parameters or override the global defined
         for p in task.param_ids:
-            additionnal_params[p.name.upper()] = p.value % d_par
+            additionnal_params[p.name.upper()] = convert_param(p.value, d_par)
 
         # Add all new parameters on the command line
         for k, v in additionnal_params.items():
@@ -610,7 +634,7 @@ class PdiTaskParam(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=256, required=True),
+        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available',),
         'trans_id': fields.many2one('pdi.task', 'Task'),
     }
 
