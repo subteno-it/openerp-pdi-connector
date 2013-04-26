@@ -24,7 +24,7 @@
 
 {
     'name': 'Pentaho Data Integration Connector',
-    'version': '1.5',
+    'version': '1.6',
     'category': 'Tools',
     'description': """Module to manage Pentaho Data Integration
     - Start task or transformation define on the repository
