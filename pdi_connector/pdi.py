@@ -36,6 +36,7 @@ import pooler
 import tools
 import time
 import logging
+import tempfile
 
 _logger = logging.getLogger('pdi_connector')
 
@@ -50,8 +51,11 @@ _pdi_version = [
     ('5.0', 'v5.0'),
 ]
 
-root_install = tools.config.get('pdi_path', '/opt/pdi') or ''
+root_install = tools.config.get('pdi_path', '/opt/pdi') or '/opt/pdi'
 _logger.info('PDI Path: %s' % root_install)
+
+exec_shell = tools.config.get('pdi_shell', '/bin/bash') or '/bin/bash'
+_logger.info('Shell use to execute pan and kitchen: %s' % exec_shell)
 
 try:
     import getpass
@@ -144,14 +148,13 @@ class PdiInstance(osv.osv):
                     # After create the schema, we initialize the repository with a SQL file
                     fct_file = openerp.tools.misc.file_open(os.path.join(get_module_path('pdi_connector'), 'sql', 'repository44.sql'))
                     try:
-                        query = fct_file.read() % {'db_user': config.get('pdi_dbuser', 'kettle'),}
+                        query = fct_file.read() % {'db_user': config.get('pdi_dbuser', 'kettle')}
                         cr.execute(query)
                         cr.commit()
                     finally:
                         fct_file.close()
                 else:
                     _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')
-
 
         # Update ir_config_parameter for using with PL/Python
         config_obj = pool.get('ir.config_parameter')
@@ -250,6 +253,10 @@ class PdiTransformation(osv.osv):
             env = os.environ.copy()
             env['JAVAMAXMEM'] = str(transf.memory)
 
+        # We create a new parameter OERP_EXPORT_EXPORT to store all files produce by this transformation
+        # and for each files, we create an attachment in OpenERP
+        tmpdir = tempfile.mkdtemp(prefix='oerp', suffix='trans')
+
         ctx = context.copy()
         cmd = [
             '%s/pan.sh' % pdi,
@@ -272,6 +279,7 @@ class PdiTransformation(osv.osv):
             '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),
             '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),
             '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),
+            '"-param:%s=%s"' % ('OERP_EXPORT_PATH', tmpdir),
         ]
 
         # for each param define on this transformation, add it as argument
@@ -295,7 +303,7 @@ class PdiTransformation(osv.osv):
         for k, v in additionnal_params.items():
             cmd.append('"-param:%s=%s"' % (k, v))
 
-        def thread_transformation(cr, uid, ids, cmd, path, env=None, context=None):
+        def thread_transformation(cr, uid, ids, cmd, path, env=None, exportfiledir='/tmp', context=None):
             """
             Execute the transformation in a thread
             """
@@ -308,7 +316,7 @@ class PdiTransformation(osv.osv):
             err_filename = '/tmp/pan-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
             _logger.debug('(trans) Call process')
-            retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, env=env, cwd=path)
+            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None, outfp, errfp, shell=True, env=env, cwd=path)
             _logger.debug('(trans) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
@@ -345,6 +353,9 @@ class PdiTransformation(osv.osv):
             self.write(cr, uid, ids, {'state': 'stop'}, context=context)
             cr.commit()
             cr.close()
+
+            # We must remove the temporary directory
+            os.removedirs(exportfiledir)
             return True
 
         if transf.log_cmd:
@@ -352,7 +363,7 @@ class PdiTransformation(osv.osv):
         else:
             _logger.debug('(trans) Compose thread with %s' % ' '.join(cmd))
 
-        thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, env, ctx))
+        thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, env, tmpdir, ctx))
         return True
 
     def run_scheduler(self, cr, uid, transformation_id=False, context=None):
@@ -519,7 +530,7 @@ class PdiTask(osv.osv):
             err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
             errfp = open(err_filename, 'w')
             _logger.debug('(task) Call process')
-            retcode = subprocess.call(' '.join(cmd), 0, None, None, outfp, errfp, shell=True, env=env, cwd=path)
+            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None, outfp, errfp, shell=True, env=env, cwd=path)
             _logger.debug('(task) End call process (return code: %s)' % str(retcode))
             outfp.close()
             errfp.close()
