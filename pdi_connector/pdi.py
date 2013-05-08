@@ -358,30 +358,53 @@ class PdiTransformation(osv.osv):
             else:
                 note = _('(%s) Unknown error') % str(retcode)
 
-            def add_attachment(filename, title=None):
+            def add_attachment(filename, title=None, replace=False, res_model='pdi.transformation', res_id=ids[0]):
                 if title is None:
                     title = prefix + ' ' + transf.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']'
+
+                if transf.log_cmd:
+                    _logger.info('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
                 else:
-                    title = prefix + ' ' + title + ' [' + time.strftime('%Y%m%d%H%M%S') + ']'
+                    _logger.debug('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
 
                 fp = open(filename, 'rb')
                 vals = {
                     'datas': base64.encodestring(fp.read()),
                     'datas_fname': filename,
                     'name': title,
-                    'res_model': 'pdi.transformation',
-                    'res_id': ids[0],
+                    'res_model': res_model,
+                    'res_id': int(res_id),
                     'description': note,
                 }
                 fp.close()
-                self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+                try:
+                    self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+                except Exception, e:
+                    _logger.error('Save filed failed! %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
+                    _logger.error(str(e))
 
             # We save the logfile
             add_attachment(out_filename)
 
             # For each file, we must save it as attachment
             for tname in glob.glob(exportfiledir + '/*'):
-                add_attachment(tname, tname.split('/')[-1])
+                # Check the name of the file, if it containt and @
+                # left part containt object name and id and right part containt name of the file and extension
+                # like sale.order-10@filename.ods
+                filename = tname.split('/')[-1]
+                if len(filename.split('@')) == 1:  # This is a normal file, attach it to the transformation
+                    add_attachment(tname, filename)
+                elif len(filename.split('@')) == 2:
+                    (record, fname) = filename.split('@')
+                    record = record.split('-')
+                    if len(record) == 2:
+                        add_attachment(tname, fname, res_model=record[0], res_id=record[1])
+                    else:
+                        note += _('\nBE CAREFULL, record are incorrect for %s') % record
+                        add_attachment(tname, fname)
+
+                # Remove the file, becacuse removedirs() cannot delete directory
+                # if there is a file inside
                 os.remove(tname)
 
             # We must remove the temporary directory
