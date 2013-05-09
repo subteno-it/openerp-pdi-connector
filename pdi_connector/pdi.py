@@ -136,7 +136,7 @@ class PdiInstance(osv.osv):
                         NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;""", (config.get('pdi_dbpass', 'secret'),))
 
                     cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")
-                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'Utilisateur pour pentaho data integration';""")
+                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'User for pentaho data integration';""")
                     cr.commit()
                     cr.execute("""RESET ROLE;""")
                     pdi_user_exists = True
