@@ -106,7 +106,7 @@ class PdiInstance(osv.osv):
                 _logger.info('Import schema have been created !')
                 cr.execute("""CREATE SCHEMA import;
                        COMMENT ON SCHEMA import
-                       IS 'Schema use to store table for PDI treatement';""")
+                       IS 'Schema use to store table to import data for PDI treatement';""")
 
             cr.execute("""SELECT count(*)
                           FROM   pg_namespace
@@ -115,7 +115,7 @@ class PdiInstance(osv.osv):
                 _logger.info('Export schema have been created !')
                 cr.execute("""CREATE SCHEMA export;
                        COMMENT ON SCHEMA export
-                       IS 'Schema use to store table for PDI treatement';""")
+                       IS 'Schema use to store table to export data for PDI treatement';""")
 
             # To continue correctly, we check if we have admin privilege in these database server
             admin_privilege = False
@@ -138,12 +138,14 @@ class PdiInstance(osv.osv):
                     cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")
                     cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'Utilisateur pour pentaho data integration';""")
                     cr.commit()
+                    cr.execute("""RESET ROLE;""")
                     pdi_user_exists = True
 
             # Check if kettle schema have been created, if not log a warning
             cr.execute("""SELECT count(*) FROM pg_namespace WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
-                if admin_privilege:
+                if pdi_user_exists and admin_privilege:
+                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
                     _logger.warn('Kettle schema does not exits, we create it automatically')
                     cr.execute("""CREATE SCHEMA kettle AUTHORIZATION """ + config.get('pdi_dbuser', 'kettle') + ";")
                     cr.execute("""COMMENT ON SCHEMA kettle IS 'Schema pour Pentaho Data Integration';""")
@@ -156,6 +158,8 @@ class PdiInstance(osv.osv):
                         cr.commit()
                     finally:
                         fct_file.close()
+
+                    cr.execute("""RESET ROLE;""")
                 else:
                     _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')
 
