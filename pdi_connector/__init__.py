@@ -23,6 +23,7 @@
 ##############################################################################
 
 
+import settings
 import pdi
 #import controllers
 import report

@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
-#    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
+#    Copyright (C) 2010-2013 SYLEAM (<http://www.syleam.fr/>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
 #
 #    This file is a part of pdi_connector
@@ -40,26 +40,25 @@
     'author': 'SYLEAM',
     'website': 'http://www.syleam.fr/',
     'depends': [
-        'base',
+        'base_setup',
         'web',
     ],
-    'init_xml': [],
-    'update_xml': [
+    'data': [
         'security/groups.xml',
         'security/menus.xml',
         'security/ir.model.access.csv',
         'view/menu.xml',
         'view/pdi.xml',
+        'settings_view.xml',
         #'wizard/wizard.xml',
         #'report/report.xml',
     ],
-    'demo_xml': [],
+    'demo': [],
     'installable': True,
     'active': False,
     'license': 'AGPL-3',
     'application': True,
     'complexity': "expert",
 }
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
