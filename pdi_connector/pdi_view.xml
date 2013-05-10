@@ -36,7 +36,6 @@
         <record id="view_pdi_instance_tree" model="ir.ui.view">
             <field name="name">pdi.instance.tree</field>
             <field name="model">pdi.instance</field>
-            <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="PDI Instance">
@@ -49,7 +48,6 @@
         <record id="view_pdi_instance_form" model="ir.ui.view">
             <field name="name">pdi.instance.form</field>
             <field name="model">pdi.instance</field>
-            <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="PDI Instance">
@@ -112,7 +110,6 @@
         <record id="view_pdi_instance_search" model="ir.ui.view">
             <field name="name">pdi.instance.search</field>
             <field name="model">pdi.instance</field>
-            <field name="type">search</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <search string="Instance">
@@ -160,7 +157,6 @@
         <record id="view_pdi_instance_parameters_tree" model="ir.ui.view">
             <field name="name">pdi.instance.parameters.tree</field>
             <field name="model">pdi.instance.parameters</field>
-            <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Parameters" editable="bottom">
@@ -173,7 +169,6 @@
         <record id="view_pdi_instance_parameters_form" model="ir.ui.view">
             <field name="name">pdi.instance.parameters.form</field>
             <field name="model">pdi.instance.parameters</field>
-            <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Parameters">
@@ -189,7 +184,6 @@
         <record id="view_pdi_transformation_tree" model="ir.ui.view">
             <field name="name">pdi.transformation.tree</field>
             <field name="model">pdi.transformation</field>
-            <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Transformation">
@@ -207,7 +201,6 @@
         <record id="view_pdi_transformation_form" model="ir.ui.view">
             <field name="name">pdi.transformation.form</field>
             <field name="model">pdi.transformation</field>
-            <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Transformation">
@@ -254,7 +247,6 @@
         <record id="view_pdi_transformation_search" model="ir.ui.view">
             <field name="name">pdi.transformation.search</field>
             <field name="model">pdi.transformation</field>
-            <field name="type">search</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <search string="Transformation">
@@ -308,7 +300,6 @@
         <record id="view_pdi_task_tree" model="ir.ui.view">
             <field name="name">pdi.task.tree</field>
             <field name="model">pdi.task</field>
-            <field name="type">tree</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <tree string="Task">
@@ -325,7 +316,6 @@
         <record id="view_pdi_task_form" model="ir.ui.view">
             <field name="name">pdi.task.form</field>
             <field name="model">pdi.task</field>
-            <field name="type">form</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Task">
@@ -364,7 +354,6 @@
         <record id="view_pdi_task_search" model="ir.ui.view">
             <field name="name">pdi.task.search</field>
             <field name="model">pdi.task</field>
-            <field name="type">search</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <search string="Task">
