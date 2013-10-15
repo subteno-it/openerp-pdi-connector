@@ -235,12 +235,14 @@ class PdiTransformation(osv.osv):
         'memory': lambda *a: 0,
     }
 
-    def execute_transformation(self, cr, uid, ids, context=None):
+    def execute_transformation(self, cr, uid, ids, context=None, custom_params=None):
         """
         Execute the transformation
         """
         if context is None:
             context = {}
+        if custom_params is None:
+            custom_params = {}
 
         if context.get('nopdi'):
             _logger.info('Execute abort by nopdi in context')
@@ -320,6 +322,10 @@ class PdiTransformation(osv.osv):
         # Add new parameters or override the global defined
         for p in transf.param_ids:
             additionnal_params[p.name.upper()] = convert_param(p.value, d_par)
+
+        # Add custom per-call parameters
+        for key, value in custom_params.items():
+            additionnal_params[key.upper()] = convert_param(value, d_par)
 
         # Add all new parameters on the command line
         for k, v in additionnal_params.items():
