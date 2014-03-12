@@ -3,7 +3,8 @@
 #
 #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
 #    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
-#              Christophe CHAUVET <christophe.chauvet@syleam.fr>
+#                  2013-2014 MIROUNGA (<http://www.mirounga.fr>)
+#              Christophe CHAUVET <christophe.chauvet@gmail.com>
 #
 #    This file is a part of pdi_connector
 #

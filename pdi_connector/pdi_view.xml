@@ -48,58 +48,62 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="PDI Instance" version="7.0">
-                    <field name="name"/>
-                    <field name="version"/>
-                    <notebook colspan="4">
-                        <page string="General">
-                            <separator string="Repository information" colspan="4"/>
-                            <field name="repo_name" colspan="4"/>
-                            <field name="repo_user"/>
-                            <field name="repo_pass" password="True"/>
-                            <separator string="OpenERP for external integration" colspan="4"/>
-                            <field name="username"/>
-                            <field name="password" password="True"/>
-                        </page>
-                        <page string="Transformation">
-                            <field name="trans_ids" nolabel="1">
-                                <tree string="Transformation" colors="grey:state=='stop'">
-                                    <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
-                                    <field name="name"/>
-                                    <field name="directory"/>
-                                    <field name="state" readonly="1"/>
-                                </tree>
-                                <form string="Transformation" version="7.0">
-                                    <field name="name"/>
-                                    <field name="directory"/>
-                                    <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
-                                </form>
-                            </field>
-                        </page>
-                        <page string="Tasks">
-                            <field name="task_ids" nolabel="1">
-                                <tree string="Task" colors="grey:state=='stop'">
-                                    <button string="Launch" states="stop" type="object" name="execute_task" icon="gtk-execute"/>
-                                    <field name="name"/>
-                                    <field name="directory"/>
-                                    <field name="state" readonly="1"/>
-                                </tree>
-                                <form string="Task" version="7.0">
-                                    <field name="name"/>
-                                    <field name="directory"/>
-                                    <newline/>
-                                    <field name="state" readonly="1"/>
-                                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
-                                </form>
-                            </field>
-                        </page>
-                        <page string="Parameters">
-                            <field name="param_ids" colspan="4" nolabel="1"/>
-                        </page>
-                        <page string="Notes">
-                            <field name="note" nolabel="1" colspan="4"/>
-                        </page>
-                    </notebook>
+                    <sheet>
+                        <group colspan="4">
+                            <field name="name"/>
+                            <field name="version"/>
+
+                        </group>
+                        <notebook colspan="4">
+                            <page string="General">
+                                <group colspan="4">
+                                    <separator string="Repository information" colspan="4"/>
+                                    <group colspan="4">
+                                        <field name="repo_name"/>
+                                    </group>
+                                    <group>
+                                        <field name="repo_user"/>
+                                    </group>
+                                    <group>
+                                        <field name="repo_pass" password="True"/>
+                                    </group>
+                                    <separator string="OpenERP for external integration" colspan="4"/>
+                                    <group>
+                                        <field name="username" placeholder="Real login in OpenERP"/>
+                                    </group>
+                                    <group>
+                                        <field name="password" password="True"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Transformation">
+                                <field name="trans_ids" nolabel="1" mode="tree">
+                                    <tree string="Transformation" colors="grey:state=='stop'">
+                                        <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
+                                        <field name="name"/>
+                                        <field name="directory"/>
+                                        <field name="state" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Tasks">
+                                <field name="task_ids" nolabel="1" mode="tree">
+                                    <tree string="Task" colors="grey:state=='stop'">
+                                        <button string="Launch" states="stop" type="object" name="execute_task" icon="gtk-execute"/>
+                                        <field name="name"/>
+                                        <field name="directory"/>
+                                        <field name="state" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Parameters">
+                                <field name="param_ids" colspan="4" nolabel="1"/>
+                            </page>
+                            <page string="Notes">
+                                <field name="note" nolabel="1" colspan="4"/>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -198,40 +202,49 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Transformation" version="7.0">
-                    <field name="name"/>
-                    <field name="directory" required="1"/>
-                    <notebook colspan="4">
-                        <page string="General">
-                            <field name="instance_id"/>
-                            <field name="log_cmd"/>
-                            <separator string="Debug information" colspan="4"/>
-                            <field name="level"/>
-                            <field name="memory"/>
-                            <separator string="Scheduling" colspan="4"/>
-                            <group colspan="4" col="6">
-                                <field name="cron_id" readonly="1" colspan="2"/>
-                                <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}" colspan="2"/>
-                                <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}" colspan="2"/>
-                            </group>
-                        </page>
-                        <page string="Parameters">
-                            <field name="param_ids" nolabel="1" colspan="4">
-                                <tree string="Parameters" editable="bottom">
-                                    <field name="name" width="300"/>
-                                    <field name="value"/>
-                                </tree>
-                                <form string="Parameters" version="7.0">
-                                    <field name="name"/>
-                                    <field name="value"/>
-                                </form>
-                            </field>
-                        </page>
-                        <page string="Notes">
-                            <field name="note" nolabel="1"/>
-                        </page>
-                    </notebook>
-                    <field name="state" readonly="1"/>
-                    <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
+                    <header>
+                        <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
+                        <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}" colspan="2"/>
+                        <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}" colspan="2"/>
+                        <field name="state" readonly="1" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="directory" required="1"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="General">
+                                <group>
+                                    <group>
+                                        <separator string="Informations" colspan="4"/>
+                                        <field name="instance_id"/>
+                                        <field name="log_cmd"/>
+                                    </group>
+                                    <group>
+                                        <separator string="Debug information" colspan="4"/>
+                                        <field name="level"/>
+                                        <field name="memory"/>
+                                    </group>
+                                    <group>
+                                        <separator string="Scheduling" colspan="4"/>
+                                        <field name="cron_id" readonly="1" colspan="2"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Parameters">
+                                <field name="param_ids" nolabel="1" colspan="4">
+                                    <tree string="Parameters" editable="bottom">
+                                        <field name="name" width="300"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="note" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -308,34 +321,43 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <form string="Task" version="7.0">
-                    <field name="name"/>
-                    <field name="directory" required="1"/>
-                    <notebook colspan="4">
-                        <page string="General">
-                            <field name="instance_id"/>
-                            <field name="log_cmd"/>
-                            <separator string="Debug information" colspan="4"/>
-                            <field name="level"/>
-                            <field name="memory"/>
-                        </page>
-                        <page string="Parameters">
-                            <field name="param_ids" nolabel="1" colspan="4">
-                                <tree string="Parameters" editable="bottom">
-                                    <field name="name" width="300"/>
-                                    <field name="value"/>
-                                </tree>
-                                <form string="Parameters" version="7.0">
-                                    <field name="name"/>
-                                    <field name="value"/>
-                                </form>
-                            </field>
-                        </page>
-                        <page string="Notes">
-                            <field name="note" nolabel="1"/>
-                        </page>
-                    </notebook>
-                    <field name="state" readonly="1"/>
-                    <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
+                    <header>
+                        <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
+                        <field name="state" readonly="1" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="directory" required="1"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="General">
+                                <group>
+                                    <group>
+                                        <separator string="Information" colspan="4"/>
+                                        <field name="instance_id"/>
+                                        <field name="log_cmd"/>
+                                    </group>
+                                    <group>
+                                        <separator string="Debug information" colspan="4"/>
+                                        <field name="level"/>
+                                        <field name="memory"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Parameters">
+                                <field name="param_ids" nolabel="1" colspan="4">
+                                    <tree string="Parameters" editable="bottom">
+                                        <field name="name" width="300"/>
+                                        <field name="value"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="note" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>

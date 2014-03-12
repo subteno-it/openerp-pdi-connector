@@ -3,6 +3,7 @@
 #
 #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
 #    Copyright (C) 2010-2013 SYLEAM (<http://www.syleam.fr/>)
+#                  2013-2014 MIROUNGA (<http://www.mirounga.fr>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
 #
 #    This file is a part of pdi_connector
@@ -37,8 +38,8 @@
     - pdi_dbpass: Password of the dedicate PostgreSQL user, default 'secret'
 
     """,
-    'author': 'SYLEAM',
-    'website': 'http://www.syleam.fr/',
+    'author': 'MIROUNGA,SYLEAM',
+    'website': 'http://www.mirounga.fr/',
     'depends': [
         'base_setup',
         'knowledge',
