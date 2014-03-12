@@ -24,7 +24,8 @@
         #
         ##############################################################################
 
-        <menuitem id="menu_pdi_configuration_menu" parent="knowledge.menu_document" sequence="20" name="Pentaho Data Integration"/>
+        <menuitem id="menu_pdi_configuration_menu" parent="knowledge.menu_document" sequence="20" name="Pentaho Data Integration" 
+            groups="pdi_connector.group_pdi_menu"/>
 
         <!-- ************************************************************** -->
         <!-- ** PDI Instance ********************************************** -->
@@ -203,9 +204,11 @@
             <field name="arch" type="xml">
                 <form string="Transformation" version="7.0">
                     <header>
-                        <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
-                        <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}" colspan="2"/>
-                        <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}" colspan="2"/>
+                        <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
+                        <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}"
+                            groups="pdi_connector.group_pdi_manager"/>
+                        <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}"
+                            groups="pdi_connector.group_pdi_manager"/>
                         <field name="state" readonly="1" widget="statusbar"/>
                     </header>
                     <sheet>
