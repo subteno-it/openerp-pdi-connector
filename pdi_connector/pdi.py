@@ -255,7 +255,7 @@ class PdiTransformation(orm.Model):
 
         pdi = root_install + '/' + transf.instance_id.version
         if not os.path.exists(pdi):
-            raise osv.except_osv(_('Error'), _('pdi path does not exist'))
+            raise orm.except_orm(_('Error'), _('pdi path does not exist'))
 
         # If there is a custom memory parameter to launch pan, pass it to the command line
         env = None
@@ -343,9 +343,9 @@ class PdiTransformation(orm.Model):
             errfp.close()
 
             note = False
-            prefix = "[ERROR]"
+            prefix = "E"
             if retcode == 0:
-                prefix = "[SUCCESS]"
+                prefix = "S"
             elif retcode == 1:
                 note = _('(1) Errors occurred during processing')
             elif retcode == 2:
@@ -363,7 +363,7 @@ class PdiTransformation(orm.Model):
 
             def add_attachment(filename, title=None, replace=False, res_model='pdi.transformation', res_id=ids[0]):
                 if title is None:
-                    title = prefix + ' ' + transf.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']'
+                    title = prefix + '-' + transf.name.replace(' ', '-') + '-' + time.strftime('%Y%m%d%H%M%S') + '.log'
 
                 if transf.log_cmd:
                     _logger.info('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
@@ -528,7 +528,7 @@ class PdiTask(orm.Model):
 
         pdi = root_install + '/' + task.instance_id.version
         if not os.path.exists(pdi):
-            raise osv.except_osv(_('Error'), _('pdi path does not exist'))
+            raise orm.except_orm(_('Error'), _('pdi path does not exist'))
 
         # If there is a custom memory parameter to launch pan, pass it to the command line
         env = None
@@ -611,9 +611,9 @@ class PdiTask(orm.Model):
             errfp.close()
 
             note = False
-            prefix = "[ERROR]"
+            prefix = "E"
             if retcode == 0:
-                prefix = "[SUCCESS]"
+                prefix = "S"
             elif retcode == 1:
                 note = _('(1) Errors occurred during processing')
             elif retcode == 2:
@@ -630,7 +630,7 @@ class PdiTask(orm.Model):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + ' ' + task.name + ' [' + time.strftime('%Y%m%d%H%M%S') + ']',
+                'name': prefix + '-' + task.name.replace(' ', '-') + '-' + time.strftime('%Y%m%d%H%M%S') + '.log',
                 'res_model': 'pdi.task',
                 'res_id': ids[0],
                 'description': note,
