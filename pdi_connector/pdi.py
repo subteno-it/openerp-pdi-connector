@@ -33,7 +33,7 @@ import os
 import base64
 import thread
 import pooler
-import tools
+import openerp.tools as tools
 import time
 import logging
 import tempfile
@@ -67,7 +67,7 @@ except:
     username = 'openerp'
 
 
-class PdiInstance(osv.osv):
+class PdiInstance(orm.Model):
     _name = 'pdi.instance'
     _description = 'Instance of PDI server'
 
@@ -173,10 +173,9 @@ class PdiInstance(osv.osv):
 
         super(PdiInstance, self).__init__(pool, cr)
 
-PdiInstance()
 
 
-class PdiInstanceParameters(osv.osv):
+class PdiInstanceParameters(orm.Model):
     """
     Add parameters for instance, and write then in ~/.kettle/kettle.properties
     """
@@ -189,7 +188,6 @@ class PdiInstanceParameters(osv.osv):
         'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available'),
     }
 
-PdiInstanceParameters()
 
 
 _pdi_status = [
@@ -207,7 +205,7 @@ _get_level = [
 ]
 
 
-class PdiTransformation(osv.osv):
+class PdiTransformation(orm.Model):
     """
     Manage Transformation in the kettle repository
     """
@@ -468,10 +466,9 @@ class PdiTransformation(osv.osv):
         self.pool.get('ir.cron').unlink(cr, uid, [trs.cron_id.id], context=context)
         return self.write(cr, uid, ids, {'cron_id': False}, context=context)
 
-PdiTransformation()
 
 
-class PdiTransParam(osv.osv):
+class PdiTransParam(orm.Model):
     _name = 'pdi.trans.param'
     _description = 'Parameter to launch transformation'
 
@@ -481,10 +478,9 @@ class PdiTransParam(osv.osv):
         'trans_id': fields.many2one('pdi.transformation', 'Transformation'),
     }
 
-PdiTransParam()
 
 
-class PdiTask(osv.osv):
+class PdiTask(orm.Model):
     """
     Manage Task in the kettle repository
     """
@@ -652,10 +648,9 @@ class PdiTask(osv.osv):
         thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, env, ctx))
         return True
 
-PdiTask()
 
 
-class PdiTaskParam(osv.osv):
+class PdiTaskParam(orm.Model):
     _name = 'pdi.task.param'
     _description = 'Parameter to launch task'
 
@@ -665,6 +660,5 @@ class PdiTaskParam(osv.osv):
         'trans_id': fields.many2one('pdi.task', 'Task'),
     }
 
-PdiTaskParam()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

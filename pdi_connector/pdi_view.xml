@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <openerp>
     <data>
         ##############################################################################
@@ -24,10 +24,7 @@
         #
         ##############################################################################
 
-        <menuitem id="menu_pdi_configuration_menu" 
-            parent="knowledge.menu_document"
-            sequence="20"
-            name="Pentaho Data Integration"/>
+        <menuitem id="menu_pdi_configuration_menu" parent="knowledge.menu_document" sequence="20" name="Pentaho Data Integration"/>
 
         <!-- ************************************************************** -->
         <!-- ** PDI Instance ********************************************** -->
@@ -50,9 +47,9 @@
             <field name="model">pdi.instance</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="PDI Instance">
-                    <field name="name" select="1"/>
-                    <field name="version" select="2"/>
+                <form string="PDI Instance" version="7.0">
+                    <field name="name"/>
+                    <field name="version"/>
                     <notebook colspan="4">
                         <page string="General">
                             <separator string="Repository information" colspan="4"/>
@@ -64,32 +61,32 @@
                             <field name="password" password="True"/>
                         </page>
                         <page string="Transformation">
-                            <field name="trans_ids" nolabel="1" mode="tree,form">
+                            <field name="trans_ids" nolabel="1">
                                 <tree string="Transformation" colors="grey:state=='stop'">
                                     <button string="Launch" states="stop" type="object" name="execute_transformation" icon="gtk-execute"/>
                                     <field name="name"/>
                                     <field name="directory"/>
                                     <field name="state" readonly="1"/>
                                 </tree>
-                                <form string="Transformation">
-                                    <field name="name" select="1"/>
-                                    <field name="directory" select="1"/>
+                                <form string="Transformation" version="7.0">
+                                    <field name="name"/>
+                                    <field name="directory"/>
                                     <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_transformation" colspan="2" icon="gtk-execute"/>
                                 </form>
                             </field>
                         </page>
                         <page string="Tasks">
-                            <field name="task_ids" nolabel="1" mode="tree,form">
+                            <field name="task_ids" nolabel="1">
                                 <tree string="Task" colors="grey:state=='stop'">
                                     <button string="Launch" states="stop" type="object" name="execute_task" icon="gtk-execute"/>
                                     <field name="name"/>
                                     <field name="directory"/>
                                     <field name="state" readonly="1"/>
                                 </tree>
-                                <form string="Task">
-                                    <field name="name" select="1"/>
-                                    <field name="directory" select="1"/>
+                                <form string="Task" version="7.0">
+                                    <field name="name"/>
+                                    <field name="directory"/>
                                     <newline/>
                                     <field name="state" readonly="1"/>
                                     <button string="Launch" states="stop" type="object" name="execute_task" colspan="2" icon="gtk-execute"/>
@@ -146,10 +143,7 @@
             <field name="view_id" ref="view_pdi_instance_tree"/>
         </record>
 
-        <menuitem id="menu_pdi_instance"
-            parent="menu_pdi_configuration_menu"
-            sequence="20"
-            action="act_open_pdi_instance_view"/>
+        <menuitem id="menu_pdi_instance" parent="menu_pdi_configuration_menu" sequence="20" action="act_open_pdi_instance_view"/>
 
         <!-- ************************************************************** -->
         <!-- ** PDI Instance Parameters *********************************** -->
@@ -171,8 +165,8 @@
             <field name="model">pdi.instance.parameters</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Parameters">
-                    <field name="name" select="1"/>
+                <form string="Parameters" version="7.0">
+                    <field name="name"/>
                     <field name="value"/>
                 </form>
             </field>
@@ -203,12 +197,12 @@
             <field name="model">pdi.transformation</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Transformation">
-                    <field name="name" select="1"/>
-                    <field name="directory" select="1" required="1"/>
+                <form string="Transformation" version="7.0">
+                    <field name="name"/>
+                    <field name="directory" required="1"/>
                     <notebook colspan="4">
                         <page string="General">
-                            <field name="instance_id" select="1"/>
+                            <field name="instance_id"/>
                             <field name="log_cmd"/>
                             <separator string="Debug information" colspan="4"/>
                             <field name="level"/>
@@ -216,26 +210,24 @@
                             <separator string="Scheduling" colspan="4"/>
                             <group colspan="4" col="6">
                                 <field name="cron_id" readonly="1" colspan="2"/>
-                                <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}"
-                                    colspan="2"/>
-                                <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}"
-                                    colspan="2"/>
+                                <button string="Install Cron" icon="gtk-ok" type="object" name="install_cron" attrs="{'invisible': [('cron_id','!=', False)]}" colspan="2"/>
+                                <button string="Uninstall Cron" icon="gtk-cancel" type="object" name="uninstall_cron" attrs="{'invisible': [('cron_id','=', False)]}" colspan="2"/>
                             </group>
                         </page>
                         <page string="Parameters">
-                            <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
+                            <field name="param_ids" nolabel="1" colspan="4">
                                 <tree string="Parameters" editable="bottom">
                                     <field name="name" width="300"/>
                                     <field name="value"/>
                                 </tree>
-                                <form string="Parameters">
+                                <form string="Parameters" version="7.0">
                                     <field name="name"/>
                                     <field name="value"/>
                                 </form>
                             </field>
                         </page>
                         <page string="Notes">
-                            <field name="note" nolabel="1" />
+                            <field name="note" nolabel="1"/>
                         </page>
                     </notebook>
                     <field name="state" readonly="1"/>
@@ -251,13 +243,13 @@
             <field name="arch" type="xml">
                 <search string="Transformation">
                     <group>
-                        <field name="name" select="True"/>
+                        <field name="name"/>
                         <field name="directory"/>
                         <field name="instance_id"/>
                     </group>
                     <newline/>
                     <group expand="0" string="Group By...">
-                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'instance_id'}"/>
+                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'instance_id'}"/>
                     </group>
                 </search>
             </field>
@@ -288,10 +280,7 @@
             <field name="view_id" ref="view_pdi_transformation_tree"/>
         </record>
 
-        <menuitem id="menu_pdi_transformation"
-            parent="menu_pdi_configuration_menu"
-            sequence="30"
-            action="act_open_pdi_transformation_view"/>
+        <menuitem id="menu_pdi_transformation" parent="menu_pdi_configuration_menu" sequence="30" action="act_open_pdi_transformation_view"/>
 
         <!-- ************************************************************** -->
         <!-- ** PDI Task ************************************************** -->
@@ -318,31 +307,31 @@
             <field name="model">pdi.task</field>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
-                <form string="Task">
-                    <field name="name" select="1"/>
-                    <field name="directory" select="1" required="1"/>
+                <form string="Task" version="7.0">
+                    <field name="name"/>
+                    <field name="directory" required="1"/>
                     <notebook colspan="4">
                         <page string="General">
-                            <field name="instance_id" select="1"/>
+                            <field name="instance_id"/>
                             <field name="log_cmd"/>
                             <separator string="Debug information" colspan="4"/>
                             <field name="level"/>
                             <field name="memory"/>
                         </page>
                         <page string="Parameters">
-                            <field name="param_ids" nolabel="1" mode="tree,form" colspan="4">
+                            <field name="param_ids" nolabel="1" colspan="4">
                                 <tree string="Parameters" editable="bottom">
                                     <field name="name" width="300"/>
                                     <field name="value"/>
                                 </tree>
-                                <form string="Parameters">
+                                <form string="Parameters" version="7.0">
                                     <field name="name"/>
                                     <field name="value"/>
                                 </form>
                             </field>
                         </page>
                         <page string="Notes">
-                            <field name="note" nolabel="1" />
+                            <field name="note" nolabel="1"/>
                         </page>
                     </notebook>
                     <field name="state" readonly="1"/>
@@ -358,13 +347,13 @@
             <field name="arch" type="xml">
                 <search string="Task">
                     <group>
-                        <field name="name" select="True"/>
+                        <field name="name"/>
                         <field name="directory"/>
                         <field name="instance_id"/>
                     </group>
                     <newline/>
                     <group expand="0" string="Group By...">
-                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]"  context="{'group_by':'instance_id'}"/>
+                        <filter string="Instance" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'instance_id'}"/>
                     </group>
                 </search>
             </field>
@@ -395,10 +384,7 @@
             <field name="view_id" ref="view_pdi_task_tree"/>
         </record>
 
-        <menuitem id="menu_pdi_task"
-            parent="menu_pdi_configuration_menu"
-            sequence="30"
-            action="act_open_pdi_task_view"/>
+        <menuitem id="menu_pdi_task" parent="menu_pdi_configuration_menu" sequence="30" action="act_open_pdi_task_view"/>
 
     </data>
 </openerp>
