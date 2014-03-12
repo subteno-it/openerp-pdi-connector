@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 6.1\n"
+"Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-08 14:07+0000\n"
-"PO-Revision-Date: 2012-12-08 14:07+0000\n"
+"POT-Creation-Date: 2014-03-12 15:37+0000\n"
+"PO-Revision-Date: 2014-03-12 15:37+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,11 @@ msgid "Name of the parameters, in upper case"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_instance_user
+#: view:pdi.task:0
+msgid "Information"
+msgstr ""
+
+#. module: pdi_connector
 #: view:pdi.instance:0
 msgid "PDI Instance"
 msgstr ""
@@ -29,6 +33,11 @@ msgstr ""
 #. module: pdi_connector
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_configuration_menu
 msgid "Pentaho Data Integration"
+msgstr ""
+
+#. module: pdi_connector
+#: selection:pdi.instance,version:0
+msgid "v5.0"
 msgstr ""
 
 #. module: pdi_connector
@@ -54,20 +63,25 @@ msgid "Explain the process for the user"
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.task,memory:0
-#: field:pdi.transformation,memory:0
-msgid "Memory"
+#: model:ir.model,name:pdi_connector.model_base_config_settings
+msgid "base.config.settings"
+msgstr ""
+
+#. module: pdi_connector
+#: code:addons/pdi_connector/pdi.py:362
+#: code:addons/pdi_connector/pdi.py:628
+#, python-format
+msgid "(%s) Unknown error"
+msgstr ""
+
+#. module: pdi_connector
+#: field:base.config.settings,module_pdi_connector:0
+msgid "Active PDI module"
 msgstr ""
 
 #. module: pdi_connector
 #: model:res.groups,name:pdi_connector.group_pdi_user
 msgid "PDI / User"
-msgstr ""
-
-#. module: pdi_connector
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "pourcent(username)s : name of the session user"
 msgstr ""
 
 #. module: pdi_connector
@@ -78,19 +92,20 @@ msgid "Note"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "Group By..."
+#: selection:pdi.task,level:0
+#: selection:pdi.transformation,level:0
+msgid "Debug"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.model,name:pdi_connector.model_pdi_trans_param
-msgid "Parameter to launch transformation"
+#: view:pdi.instance:0
+msgid "Real login in OpenERP"
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.instance,version:0
-msgid "Version"
+#: code:addons/pdi_connector/pdi.py:622
+#, python-format
+msgid "(7) The task couldn't be loaded from XML or the Repository"
 msgstr ""
 
 #. module: pdi_connector
@@ -111,6 +126,18 @@ msgid "OpenERP User to connect tools with XMLRPC or NETRPC"
 msgstr ""
 
 #. module: pdi_connector
+#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_instance_view
+#: model:ir.ui.menu,name:pdi_connector.menu_pdi_instance
+#: view:pdi.instance:0
+#: field:pdi.instance.parameters,instance_id:0
+#: view:pdi.task:0
+#: field:pdi.task,instance_id:0
+#: view:pdi.transformation:0
+#: field:pdi.transformation,instance_id:0
+msgid "Instance"
+msgstr ""
+
+#. module: pdi_connector
 #: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_transformation_view
 #: model:ir.ui.menu,name:pdi_connector.menu_pdi_transformation
 #: view:pdi.instance:0
@@ -120,8 +147,8 @@ msgid "Transformation"
 msgstr ""
 
 #. module: pdi_connector
-#: model:res.groups,name:pdi_connector.group_pdi_manager
-msgid "PDI / Manager"
+#: model:ir.module.category,name:pdi_connector.module_category_etl_connector
+msgid "ETL"
 msgstr ""
 
 #. module: pdi_connector
@@ -130,14 +157,16 @@ msgid "v3.2"
 msgstr ""
 
 #. module: pdi_connector
-#: help:pdi.instance,password:0
-msgid "Password for the OpenERP User"
+#: selection:pdi.task,level:0
+#: selection:pdi.transformation,level:0
+msgid "Rowlevel"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "pourcent(dbname)s : for database name"
+#: code:addons/pdi_connector/pdi.py:350
+#: code:addons/pdi_connector/pdi.py:618
+#, python-format
+msgid "(1) Errors occurred during processing"
 msgstr ""
 
 #. module: pdi_connector
@@ -146,8 +175,9 @@ msgid "If fill, this transformation is schedule"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.instance,version:0
-msgid "v4.3"
+#: code:addons/pdi_connector/pdi.py:620
+#, python-format
+msgid "(2) An unexpected error occurred during loading / running of the task"
 msgstr ""
 
 #. module: pdi_connector
@@ -157,15 +187,20 @@ msgid "Log Command"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.instance,version:0
-msgid "v4.1"
+#: code:addons/pdi_connector/pdi.py:354
+#, python-format
+msgid "(3) Unable to prepare and initialize this transformation"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.instance:0
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "Launch"
+#: model:ir.model,name:pdi_connector.model_pdi_instance_parameters
+msgid "Parameters for this instance"
+msgstr ""
+
+#. module: pdi_connector
+#: field:pdi.task,level:0
+#: field:pdi.transformation,level:0
+msgid "Level"
 msgstr ""
 
 #. module: pdi_connector
@@ -201,13 +236,8 @@ msgid "v4.4"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.instance,version:0
-msgid "v5.0"
-msgstr ""
-
-#. module: pdi_connector
-#: help:pdi.instance.parameters,value:0
-msgid "Value of the parameter"
+#: model:res.groups,name:pdi_connector.group_pdi_manager
+msgid "PDI / Manager"
 msgstr ""
 
 #. module: pdi_connector
@@ -217,13 +247,9 @@ msgid "Nothing"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.model,name:pdi_connector.model_pdi_task_param
-msgid "Parameter to launch task"
-msgstr ""
-
-#. module: pdi_connector
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_root
-msgid "PDI Configuration"
+#: code:addons/pdi_connector/pdi.py:356
+#, python-format
+msgid "(7) The transformation couldn't be loaded from XML or the Repository"
 msgstr ""
 
 #. module: pdi_connector
@@ -233,15 +259,28 @@ msgid "Password"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "Legend"
+#: help:pdi.instance.parameters,value:0
+#: help:pdi.task.param,value:0
+#: help:pdi.trans.param,value:0
+msgid "Use [[ ]] to eval, time, datetime, timedelta is available"
 msgstr ""
 
 #. module: pdi_connector
+#: view:pdi.instance:0
 #: view:pdi.task:0
 #: view:pdi.transformation:0
-msgid "pourcent(uid)s : for id of username"
+msgid "Notes"
+msgstr ""
+
+#. module: pdi_connector
+#: selection:pdi.instance,version:0
+msgid "v4.3"
+msgstr ""
+
+#. module: pdi_connector
+#: field:pdi.instance,repo_user:0
+#: field:pdi.instance,username:0
+msgid "Username"
 msgstr ""
 
 #. module: pdi_connector
@@ -251,17 +290,10 @@ msgid "Status"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_task_view
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task
-#: view:pdi.instance:0
-#: view:pdi.task:0
-#: field:pdi.task.param,trans_id:0
-msgid "Task"
-msgstr ""
-
-#. module: pdi_connector
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_userroot
-msgid "PDI - ETL"
+#: code:addons/pdi_connector/pdi.py:406
+#, python-format
+msgid "\n"
+"BE CAREFULL, record are incorrect for %s"
 msgstr ""
 
 #. module: pdi_connector
@@ -276,26 +308,32 @@ msgid "Name"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.task,level:0
-#: selection:pdi.transformation,level:0
-msgid "Rowlevel"
+#: model:ir.model,name:pdi_connector.model_pdi_task_param
+msgid "Parameter to launch task"
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.task,level:0
-#: field:pdi.transformation,level:0
-msgid "Level"
+#: view:pdi.instance:0
+#: view:pdi.task:0
+#: view:pdi.transformation:0
+msgid "Launch"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.task,level:0
-#: selection:pdi.transformation,level:0
-msgid "Debug"
+#: help:pdi.instance,password:0
+msgid "Password for the OpenERP User"
 msgstr ""
 
 #. module: pdi_connector
 #: help:pdi.instance,repo_user:0
 msgid "Enter the username for this repository"
+msgstr ""
+
+#. module: pdi_connector
+#: code:addons/pdi_connector/pdi.py:258
+#: code:addons/pdi_connector/pdi.py:531
+#, python-format
+msgid "pdi path does not exist"
 msgstr ""
 
 #. module: pdi_connector
@@ -312,8 +350,10 @@ msgid "Use to display the kettle as root menu\n"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.model,name:pdi_connector.model_pdi_instance_parameters
-msgid "Parameters for this instance"
+#: code:addons/pdi_connector/pdi.py:360
+#: code:addons/pdi_connector/pdi.py:626
+#, python-format
+msgid "(9) Command line usage printing"
 msgstr ""
 
 #. module: pdi_connector
@@ -327,15 +367,17 @@ msgid "Install Cron"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.instance:0
-#: view:pdi.task:0
-#: view:pdi.transformation:0
-msgid "Notes"
+#: selection:pdi.task,state:0
+#: selection:pdi.transformation,state:0
+msgid "Stopped"
 msgstr ""
 
 #. module: pdi_connector
+#: code:addons/pdi_connector/pdi.py:258
+#: code:addons/pdi_connector/pdi.py:531
 #: selection:pdi.task,level:0
 #: selection:pdi.transformation,level:0
+#, python-format
 msgid "Error"
 msgstr ""
 
@@ -351,9 +393,9 @@ msgid "Task of a PDI instance"
 msgstr ""
 
 #. module: pdi_connector
-#: field:pdi.instance,repo_user:0
-#: field:pdi.instance,username:0
-msgid "Username"
+#: code:addons/pdi_connector/pdi.py:352
+#, python-format
+msgid "(2) An unexpected error occurred during loading / running of the transformation"
 msgstr ""
 
 #. module: pdi_connector
@@ -363,9 +405,8 @@ msgid "Detailed"
 msgstr ""
 
 #. module: pdi_connector
-#: view:pdi.task:0
 #: view:pdi.transformation:0
-msgid "pourcent(dbuser)s : for database username"
+msgid "Informations"
 msgstr ""
 
 #. module: pdi_connector
@@ -386,25 +427,31 @@ msgid "Custom memory to launch this treament, if 0 use standard"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_instance_view
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_instance
-#: view:pdi.instance:0
-#: field:pdi.instance.parameters,instance_id:0
 #: view:pdi.task:0
-#: field:pdi.task,instance_id:0
 #: view:pdi.transformation:0
-#: field:pdi.transformation,instance_id:0
-msgid "Instance"
+msgid "Group By..."
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_transformation_user
-msgid "PDI Transformation"
+#: selection:pdi.instance,version:0
+msgid "v4.1"
+msgstr ""
+
+#. module: pdi_connector
+#: model:ir.model,name:pdi_connector.model_pdi_trans_param
+msgid "Parameter to launch transformation"
 msgstr ""
 
 #. module: pdi_connector
 #: view:pdi.transformation:0
 msgid "Uninstall Cron"
+msgstr ""
+
+#. module: pdi_connector
+#: code:addons/pdi_connector/pdi.py:358
+#: code:addons/pdi_connector/pdi.py:624
+#, python-format
+msgid "(8) Error loading steps or plugins (error in loading one of the plugins mostly)"
 msgstr ""
 
 #. module: pdi_connector
@@ -420,8 +467,19 @@ msgid "Cron"
 msgstr ""
 
 #. module: pdi_connector
-#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task_user
-msgid "PDI Task"
+#: help:base.config.settings,module_pdi_connector:0
+msgid "Install Pentaho Data Integration Connector for OpenERP"
+msgstr ""
+
+#. module: pdi_connector
+#: field:pdi.instance,version:0
+msgid "Version"
+msgstr ""
+
+#. module: pdi_connector
+#: field:pdi.task,memory:0
+#: field:pdi.transformation,memory:0
+msgid "Memory"
 msgstr ""
 
 #. module: pdi_connector
@@ -440,9 +498,17 @@ msgid "Scheduling"
 msgstr ""
 
 #. module: pdi_connector
-#: selection:pdi.task,state:0
-#: selection:pdi.transformation,state:0
-msgid "Stopped"
+#: model:ir.actions.act_window,name:pdi_connector.act_open_pdi_task_view
+#: model:ir.ui.menu,name:pdi_connector.menu_pdi_task
+#: view:pdi.instance:0
+#: view:pdi.task:0
+#: field:pdi.task.param,trans_id:0
+msgid "Task"
+msgstr ""
+
+#. module: pdi_connector
+#: view:base.config.settings:0
+msgid "Penthao Data Inetgration"
 msgstr ""
 
 #. module: pdi_connector
