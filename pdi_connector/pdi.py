@@ -3,6 +3,7 @@
 #
 #    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
 #    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
+#                  2013-2014 MIROUNGA (<http://www.mirounga.fr>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
 #
 #    This file is a part of pdi_connector
@@ -22,7 +23,7 @@
 #
 ##############################################################################
 
-from openerp.osv import osv
+from openerp.osv import orm
 from openerp.osv import fields
 from openerp.tools import config
 from openerp.tools.translate import _
@@ -77,9 +78,9 @@ class PdiInstance(orm.Model):
         'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
         'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
         'note': fields.text('Note', ),
-        'repo_name': fields.char('Name', size=256, help='Enter the name of the repository'),
-        'repo_user': fields.char('Username', size=64, help='Enter the username for this repository'),
-        'repo_pass': fields.char('Password', size=64, help='Enter the password for this repository'),
+        'repo_name': fields.char('Name', size=256, required=True, help='Enter the name of the repository'),
+        'repo_user': fields.char('Username', size=64, required=True, help='Enter the username for this repository'),
+        'repo_pass': fields.char('Password', size=64, required=True, help='Enter the password for this repository'),
         'param_ids': fields.one2many('pdi.instance.parameters', 'instance_id', 'Parameters'),
         'username': fields.char('Username', size=64, help='OpenERP User to connect tools with XMLRPC or NETRPC'),
         'password': fields.char('Password', size=64, help='Password for the OpenERP User'),
