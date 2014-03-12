@@ -24,18 +24,27 @@
         #
         ##############################################################################
 
+        <record id="module_category_etl_connector" model="ir.module.category">
+            <field name="name">ETL</field>
+            <field name="parent_id" ref="base.module_category_knowledge_management"/>
+            <field name="sequence">10</field>
+        </record>
+
         <record id="group_pdi_user" model="res.groups">
             <field name="name">PDI / User</field>
+            <field name="category_id" ref="module_category_etl_connector"/>
         </record>
 
         <record id="group_pdi_manager" model="res.groups">
             <field name="name">PDI / Manager</field>
+            <field name="category_id" ref="module_category_etl_connector"/>
         </record>
 
         <record id="group_pdi_menu" model="res.groups">
             <field name="name">PDI / Menu</field>
             <field name="comment">Use to display the kettle as root menu
 select another group (user or manager) to user the transformation or task</field>
+            <field name="category_id" ref="module_category_etl_connector"/>
         </record>
 
     </data>
