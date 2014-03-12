@@ -164,6 +164,26 @@ class PdiInstance(orm.Model):
                 else:
                     _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')
 
+            # Check if all table in schema kettle is owned by kettle user
+            if pdi_user_exists and admin_privilege:
+                cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
+                # First we always affect owner kettle to the schema kettle
+                cr.execute("""ALTER SCHEMA kettle OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
+                cr.execute("""SELECT schemaname, tablename
+                                FROM pg_tables
+                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """'
+                                 AND tableowner != '""" + config.get('pdi_dbuser', 'kettle') + """';""")
+                for tbl in cr.fetchall():
+                    _logger.warn("Table %s.%s does not have the good right" % (tbl[0], tbl[1]))
+                    cr.execute("""ALTER TABLE """ + tbl[0] + """.""" + tbl[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
+                # Do the same for sequence
+                cr.execute("""SELECT schemaname, relname
+                                FROM pg_statio_all_sequences
+                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """';""")
+                for seq in cr.fetchall():
+                    cr.execute("""ALTER SEQUENCE """ + seq[0] + """.""" + seq[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
+
+
         # Update ir_config_parameter for using with PL/Python
         config_obj = pool.get('ir.config_parameter')
         user = pool.get('res.users').browse(cr, 1, 1)
