@@ -42,7 +42,7 @@ import glob
 
 from datetime import datetime, timedelta
 
-_logger = logging.getLogger('pdi_connector')
+_logger = logging.getLogger(__name__)
 
 
 _pdi_version = [
