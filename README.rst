@@ -6,7 +6,7 @@ Remote Pentaho Data Integration from OpenERP to launch tasks or transformations
 Installation
 ------------
 
-The name of this module must be *sale_simulator*, see below the command line to retrieve it
+The name of this module must be *pdi_connector*, see below the command line to retrieve it
 
 ::
 
