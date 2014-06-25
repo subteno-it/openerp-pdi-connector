@@ -87,9 +87,9 @@ class PdiInstance(orm.Model):
     }
 
     _defaults = {
-        'repo_name': lambda *a: '',
-        'repo_user': lambda *a: 'admin',
-        'repo_pass': lambda *a: 'admin',
+        'repo_name': '',
+        'repo_user': 'admin',
+        'repo_pass': 'admin',
     }
 
     def __init__(self, pool, cr):
@@ -247,11 +247,11 @@ class PdiTransformation(orm.Model):
     }
 
     _defaults = {
-        'state': lambda *a: 'stop',
-        'level': lambda *a: 'Basic',
-        'note': lambda *a: False,
-        'log_cmd': lambda *a: False,
-        'memory': lambda *a: 0,
+        'state': 'stop',
+        'level': 'Basic',
+        'note': False,
+        'log_cmd': False,
+        'memory': 0,
     }
 
     def execute_transformation(self, cr, uid, ids, context=None):
@@ -262,7 +262,7 @@ class PdiTransformation(orm.Model):
             context = {}
 
         if context.get('nopdi'):
-            _logger.info('Execute abort by nopdi in context')
+            _logger.info('Execute transformation abort by nopdi in context')
             return True
 
         transf = self.browse(cr, uid, ids[0], context=context)
@@ -521,10 +521,10 @@ class PdiTask(orm.Model):
     }
 
     _defaults = {
-        'state': lambda *a: 'stop',
-        'level': lambda *a: 'Basic',
-        'note': lambda *a: False,
-        'memory': lambda *a: 0,
+        'state': 'stop',
+        'level': 'Basic',
+        'note': False,
+        'memory': 0,
     }
 
     def execute_task(self, cr, uid, ids, context=None):
@@ -535,7 +535,7 @@ class PdiTask(orm.Model):
             context = {}
 
         if context.get('nopdi'):
-            _logger.info('Execute abort by nopdi in context')
+            _logger.info('Execute task abort by nopdi in context')
             return True
 
         task = self.browse(cr, uid, ids[0], context=context)
