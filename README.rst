@@ -12,7 +12,7 @@ The name of this module must be *pdi_connector*, see below the command line to r
 
     mkdir modules/pdi
     cd modules/pdi
-    git clone https://github.com/syleam/openerp-pdi-connector.git ./addons
+    git clone https://github.com/mga-team-odoo/pdi-connector.git ./addons
 
 Add the addons folder to the addons_path in the openerp.conf
 
