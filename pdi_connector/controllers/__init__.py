@@ -8,8 +8,8 @@
 #    This file is a part of pdi_connector
 #
 #    pdi_connector is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
+#    it under the terms of the GNU Affero General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
 #    pdi_connector is distributed in the hope that it will be useful,
@@ -42,7 +42,8 @@ class PdiImport(openerpweb.Controller):
         if 'token' not in args:
             return werkzeug.wrappers.Response('Missing token', status=400)
 
-        return werkzeug.wrappers.Response('PDI Connector is installed', status=200)
+        return werkzeug.wrappers.Response('PDI Connector is installed',
+                                          status=200)
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

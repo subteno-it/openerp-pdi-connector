@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
+#    pdi_connector module for OpenERP, Module to manage Pentaho Data
+#                                      Integration
 #    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
 #                  2013-2014 MIROUNGA (<http://www.mirounga.fr>)
 #              Christophe CHAUVET <christophe.chauvet@gmail.com>
@@ -26,7 +27,7 @@
 
 import settings
 import pdi
-#import controllers
+# import controllers
 import report
 import wizard
 
