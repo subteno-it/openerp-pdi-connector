@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    pdi_connector module for OpenERP, Module to manage Pentaho Data Integration
+#    pdi_connector module for OpenERP, Module to manage Pentaho Data
+#                                      Integration
 #    Copyright (C) 2010 SYLEAM (<http://www.syleam.fr/>)
 #                  2013-2014 MIROUNGA (<http://www.mirounga.fr>)
 #              Christophe CHAUVET <christophe.chauvet@syleam.fr>
@@ -28,7 +29,7 @@ from openerp.osv import fields
 from openerp.tools import config
 from openerp.tools.translate import _
 from openerp.modules import get_module_path
-from openerp.addons.pdi_connector.common import PDI_VERSION, PDI_STATUS, GET_LEVEL
+from openerp.addons.pdi_connector.common import PDI_VERSION, PDI_STATUS, GET_LEVEL  # noqa
 
 import openerp
 import subprocess
@@ -66,15 +67,22 @@ class PdiInstance(orm.Model):
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'version': fields.selection(PDI_VERSION, 'Version', required=True,),
-        'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
+        'trans_ids': fields.one2many('pdi.transformation', 'instance_id',
+                                     'Transformations'),
         'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
         'note': fields.text('Note', ),
-        'repo_name': fields.char('Name', size=256, required=True, help='Enter the name of the repository'),
-        'repo_user': fields.char('Username', size=64, required=True, help='Enter the username for this repository'),
-        'repo_pass': fields.char('Password', size=64, required=True, help='Enter the password for this repository'),
-        'param_ids': fields.one2many('pdi.instance.parameters', 'instance_id', 'Parameters'),
-        'username': fields.char('Username', size=64, help='OpenERP User to connect tools with XMLRPC or NETRPC'),
-        'password': fields.char('Password', size=64, help='Password for the OpenERP User'),
+        'repo_name': fields.char('Name', size=256, required=True,
+                                 help='Enter the name of the repository'),
+        'repo_user': fields.char('Username', size=64, required=True,
+                                 help='Enter the username for this repository'),  # noqa
+        'repo_pass': fields.char('Password', size=64, required=True,
+                                 help='Enter the password for this repository'),  # noqa
+        'param_ids': fields.one2many('pdi.instance.parameters', 'instance_id',
+                                     'Parameters'),
+        'username': fields.char('Username', size=64,
+                                help='OpenERP User to connect tools with XMLRPC or NETRPC'),  # noqa
+        'password': fields.char('Password', size=64,
+                                help='Password for the OpenERP User'),
     }
 
     _defaults = {
@@ -97,8 +105,8 @@ class PdiInstance(orm.Model):
             if not cr.fetchone()[0]:
                 _logger.info('Import schema have been created !')
                 cr.execute("""CREATE SCHEMA import;
-                       COMMENT ON SCHEMA import
-                       IS 'Schema use to store table to import data for PDI treatement';""")
+        COMMENT ON SCHEMA import
+        IS 'Schema use to store table to import data for PDI treatement';""")
 
             cr.execute("""SELECT count(*)
                           FROM   pg_namespace
@@ -106,46 +114,57 @@ class PdiInstance(orm.Model):
             if not cr.fetchone()[0]:
                 _logger.info('Export schema have been created !')
                 cr.execute("""CREATE SCHEMA export;
-                       COMMENT ON SCHEMA export
-                       IS 'Schema use to store table to export data for PDI treatement';""")
+        COMMENT ON SCHEMA export
+        IS 'Schema use to store table to export data for PDI treatement';""")
 
-            # To continue correctly, we check if we have admin privilege in these database server
+            # To continue correctly, we check if we have admin privilege
+            # in these database server
             admin_privilege = False
-            cr.execute("""SELECT count(*) from pg_roles WHERE rolname=%s and rolcanlogin=false;""", (config.get('db_admin', 'oerpadmin'),))
+            cr.execute("""SELECT count(*) from pg_roles
+                           WHERE rolname=%s and rolcanlogin=false;
+                       """, (config.get('db_admin', 'oerpadmin'),))
             if cr.fetchone()[0]:
                 admin_privilege = True
 
             # Check if kettle PostgreSQL user exists, if yes:
             pdi_user_exists = False
-            cr.execute("""SELECT count(*) from pg_roles WHERE rolname=%s and rolcanlogin=True;""", (config.get('pdi_dbuser', 'kettle'),))
+            cr.execute("""SELECT count(*) from pg_roles
+                       WHERE rolname=%s and rolcanlogin=True;
+                       """, (config.get('pdi_dbuser', 'kettle'),))
             if cr.fetchone()[0]:
                 pdi_user_exists = True
             else:
-                # If kettle user doesn't exist, check if we have role with SUPERUSER rights
+                # If kettle user doesn't exist,
+                # check if we have role with SUPERUSER rights
                 if admin_privilege:
-                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
+                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))  # noqa
                     cr.execute("""CREATE ROLE """ + config.get('pdi_dbuser', 'kettle') + """ LOGIN ENCRYPTED PASSWORD %s
-                        NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;""", (config.get('pdi_dbpass', 'secret'),))
+                        NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;""", (config.get('pdi_dbpass', 'secret'),))  # noqa
 
-                    cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")
-                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'User for pentaho data integration';""")
+                    cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")  # noqa
+                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'User for pentaho data integration';""")  # noqa
                     cr.commit()
                     cr.execute("""RESET ROLE;""")
                     pdi_user_exists = True
 
             # Check if kettle schema have been created, if not log a warning
-            cr.execute("""SELECT count(*) FROM pg_namespace WHERE  nspname='kettle'""")
+            cr.execute("""SELECT count(*) FROM pg_namespace
+                           WHERE  nspname='kettle'""")
             if not cr.fetchone()[0]:
                 if pdi_user_exists and admin_privilege:
-                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
-                    _logger.warn('Kettle schema does not exits, we create it automatically')
-                    cr.execute("""CREATE SCHEMA kettle AUTHORIZATION """ + config.get('pdi_dbuser', 'kettle') + ";")
-                    cr.execute("""COMMENT ON SCHEMA kettle IS 'Schema pour Pentaho Data Integration';""")
+                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))  # noqa
+                    _logger.warn('Kettle schema does not exits, we create it automatically')  # noqa
+                    cr.execute("""CREATE SCHEMA kettle AUTHORIZATION """ + config.get('pdi_dbuser', 'kettle') + ";")  # noqa
+                    cr.execute("""COMMENT ON SCHEMA kettle IS 'Schema pour Pentaho Data Integration';""")  # noqa
 
-                    # After create the schema, we initialize the repository with a SQL file
-                    fct_file = openerp.tools.misc.file_open(os.path.join(get_module_path('pdi_connector'), 'sql', 'repository44.sql'))
+                    # After create the schema,
+                    # we initialize the repository with a SQL file
+                    fct_file = openerp.tools.misc.file_open(
+                        os.path.join(get_module_path('pdi_connector'),
+                                     'sql', 'repository44.sql'))
                     try:
-                        query = fct_file.read() % {'db_user': config.get('pdi_dbuser', 'kettle')}
+                        query = fct_file.read() % {
+                            'db_user': config.get('pdi_dbuser', 'kettle')}
                         cr.execute(query)
                         cr.commit()
                     finally:
@@ -153,38 +172,40 @@ class PdiInstance(orm.Model):
 
                     cr.execute("""RESET ROLE;""")
                 else:
-                    _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')
+                    _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')  # noqa
 
             # Check if all table in schema kettle is owned by kettle user
             if pdi_user_exists and admin_privilege:
-                cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))
+                cr.execute("""SET ROLE %s""", (
+                    config.get('db_admin', 'oerpadmin'),))
                 # First we always affect owner kettle to the schema kettle
-                cr.execute("""ALTER SCHEMA kettle OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
+                cr.execute("""ALTER SCHEMA kettle OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
                 cr.execute("""SELECT schemaname, tablename
                                 FROM pg_tables
                                WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """'
-                                 AND tableowner != '""" + config.get('pdi_dbuser', 'kettle') + """';""")
+                                 AND tableowner != '""" + config.get('pdi_dbuser', 'kettle') + """';""")  # noqa
                 for tbl in cr.fetchall():
-                    _logger.warn("Table %s.%s does not have the good right" % (tbl[0], tbl[1]))
-                    cr.execute("""ALTER TABLE """ + tbl[0] + """.""" + tbl[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
+                    _logger.warn("Table %s.%s does not have the good right" % (tbl[0], tbl[1]))  # noqa
+                    cr.execute("""ALTER TABLE """ + tbl[0] + """.""" + tbl[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
                 # Do the same for sequence
                 cr.execute("""SELECT schemaname, relname
                                 FROM pg_statio_all_sequences
-                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """';""")
+                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """';""")  # noqa
                 for seq in cr.fetchall():
-                    cr.execute("""ALTER SEQUENCE """ + seq[0] + """.""" + seq[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")
-
+                    cr.execute("""ALTER SEQUENCE """ + seq[0] + """.""" + seq[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
 
         # Update ir_config_parameter for using with PL/Python
         config_obj = pool.get('ir.config_parameter')
         user = pool.get('res.users').browse(cr, 1, 1)
-        config_obj.set_param(cr, 1, 'extlib.host', tools.config.get('netrpc_interface', 'localhost') or 'localhost')
-        config_obj.set_param(cr, 1, 'extlib.port', tools.config.get('netrpc_port', 'localhost'))
+        config_obj.set_param(
+            cr, 1, 'extlib.host',
+            tools.config.get('netrpc_interface', 'localhost') or 'localhost')
+        config_obj.set_param(
+            cr, 1, 'extlib.port', tools.config.get('netrpc_port', 'localhost'))
         config_obj.set_param(cr, 1, 'extlib.user', user.login)
         config_obj.set_param(cr, 1, 'extlib.pass', user.password)
 
         super(PdiInstance, self).__init__(pool, cr)
-
 
 
 class PdiInstanceParameters(orm.Model):
@@ -196,11 +217,11 @@ class PdiInstanceParameters(orm.Model):
 
     _columns = {
         'instance_id': fields.many2one('pdi.instance', 'Instance'),
-        'name': fields.char('Name', size=32, help='Name of the parameters, in upper case', required=True),
-        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available'),
+        'name': fields.char('Name', size=32, required=True,
+                            help='Name of the parameters, in upper case',),
+        'value': fields.char('Value', size=256, required=True,
+                             help='Use [[ ]] to eval, time, datetime, timedelta is available'),  # noqa
     }
-
-
 
 
 class PdiTransformation(orm.Model):
@@ -212,15 +233,20 @@ class PdiTransformation(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=128, required=True),
-        'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
+        'instance_id': fields.many2one('pdi.instance', 'Instance',
+                                       required=True),
         'state': fields.selection(PDI_STATUS, 'Status'),
         'directory': fields.char('Directory', size=256),
-        'param_ids': fields.one2many('pdi.trans.param', 'trans_id', 'Parameters'),
+        'param_ids': fields.one2many('pdi.trans.param', 'trans_id',
+                                     'Parameters'),
         'level': fields.selection(GET_LEVEL, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
-        'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
-        'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
-        'cron_id': fields.many2one('ir.cron', 'Cron', help='If fill, this transformation is schedule'),
+        'log_cmd': fields.boolean('Log Command',
+                                  help='Log command file as info, usefull for debugging'),  # noqa
+        'memory': fields.integer('Memory',
+                                 help='Custom memory to launch this treament, if 0 use standard'),  # noqa
+        'cron_id': fields.many2one('ir.cron', 'Cron',
+                                   help='If fill, this transformation is schedule'),  # noqa
     }
 
     _defaults = {
@@ -254,13 +280,15 @@ class PdiTransformation(orm.Model):
         if not os.path.exists(pdi):
             raise orm.except_orm(_('Error'), _('pdi path does not exist'))
 
-        # If there is a custom memory parameter to launch pan, pass it to the command line
+        # If there is a custom memory parameter to launch pan, pass it
+        # to the command line
         env = None
         if transf.memory:
             env = os.environ.copy()
             env['JAVAMAXMEM'] = str(transf.memory)
 
-        # We create a new parameter OERP_EXPORT_EXPORT to store all files produce by this transformation
+        # We create a new parameter OERP_EXPORT_EXPORT to store all files
+        # produce by this transformation
         # and for each files, we create an attachment in OpenERP
         tmpdir = tempfile.mkdtemp(prefix='oerp', suffix='trans')
 
@@ -273,19 +301,19 @@ class PdiTransformation(orm.Model):
             '"-dir=%s"' % transf.directory,
             '"-trans=%s"' % transf.name,
             '"-level=%s"' % transf.level,
-            '"-param:%s=/tmp/pan-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),
-            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config.get('db_host', False)) and tools.config['db_host'] or 'localhost'),
-            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config.get('db_port', False)) and tools.config['db_port'] or '5432'),
+            '"-param:%s=/tmp/pan-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config.get('db_host', False)) and tools.config['db_host'] or 'localhost'),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config.get('db_port', False)) and tools.config['db_port'] or '5432'),  # noqa
             '"-param:%s=%s"' % ('OERP_DB_NAME', cr.dbname),
-            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config.get('db_user', 'openerp')),
-            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config.get('db_password', 'openerp')),
-            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),
-            '"-param:%s=%s"' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),
-            '"-param:%s=%s"' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),
-            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),
-            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),
-            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),
-            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),
+            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config.get('db_user', 'openerp')),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config.get('db_password', 'openerp')),  # noqa
+            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),  # noqa
+            '"-param:%s=%s"' % ('OERP_USERNAME', transf.instance_id.username or 'admin'),  # noqa
+            '"-param:%s=%s"' % ('OERP_PASSWORD', transf.instance_id.password or 'admin'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),  # noqa
             '"-param:%s=%s"' % ('OERP_EXPORT_PATH', tmpdir),
         ]
 
@@ -304,8 +332,10 @@ class PdiTransformation(orm.Model):
             if additional_dict is None:
                 additional_dict = {}
 
-            if parameter and  parameter.startswith('[['):
-                return eval(parameter.replace('[[', '').replace(']]', ''), {'time': time, 'datetime': datetime, 'timedelta': timedelta}) or ''
+            if parameter and parameter.startswith('[['):
+                return eval(parameter.replace('[[', '').replace(']]', ''), {
+                    'time': time, 'datetime': datetime,
+                    'timedelta': timedelta}) or ''
             return parameter % additional_dict
 
         additionnal_params = {}
@@ -321,21 +351,26 @@ class PdiTransformation(orm.Model):
         for k, v in additionnal_params.items():
             cmd.append('"-param:%s=%s"' % (k, v))
 
-        def thread_transformation(cr, uid, ids, cmd, path, env=None, exportfiledir='/tmp', context=None):
+        def thread_transformation(cr, uid, ids, cmd, path, env=None,
+                                  exportfiledir='/tmp', context=None):
             """
             Execute the transformation in a thread
             """
             cr = pooler.get_db(cr.dbname).cursor()
             _logger.debug('(trans) Thread start')
 
-            out_filename = '/tmp/pan-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
+            out_filename = '/tmp/pan-stdout-%s-%s.log' % (cr.dbname,
+                                                          str(ids[0]))
             outfp = open(out_filename, 'w')
 
-            err_filename = '/tmp/pan-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
+            err_filename = '/tmp/pan-stderr-%s-%s.log' % (cr.dbname,
+                                                          str(ids[0]))
             errfp = open(err_filename, 'w')
             _logger.debug('(trans) Call process')
-            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None, outfp, errfp, shell=True, env=env, cwd=path)
-            _logger.debug('(trans) End call process (return code: %s)' % str(retcode))
+            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None,
+                                      outfp, errfp, shell=True, env=env,
+                                      cwd=path)
+            _logger.debug('(trans) End call process (return code: %s)' % str(retcode))  # noqa
             outfp.close()
             errfp.close()
 
@@ -346,26 +381,28 @@ class PdiTransformation(orm.Model):
             elif retcode == 1:
                 note = _('(1) Errors occurred during processing')
             elif retcode == 2:
-                note = _('(2) An unexpected error occurred during loading / running of the transformation')
+                note = _('(2) An unexpected error occurred during loading / running of the transformation')  # noqa
             elif retcode == 3:
-                note = _('(3) Unable to prepare and initialize this transformation')
+                note = _('(3) Unable to prepare and initialize this transformation')  # noqa
             elif retcode == 7:
-                note = _("(7) The transformation couldn't be loaded from XML or the Repository")
+                note = _("(7) The transformation couldn't be loaded from XML or the Repository")  # noqa
             elif retcode == 8:
-                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')
+                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')  # noqa
             elif retcode == 9:
                 note = _('(9) Command line usage printing')
             else:
                 note = _('(%s) Unknown error') % str(retcode)
 
-            def add_attachment(filename, title=None, replace=False, res_model='pdi.transformation', res_id=ids[0]):
+            def add_attachment(filename, title=None, replace=False,
+                               res_model='pdi.transformation', res_id=ids[0]):
                 if title is None:
-                    title = prefix + '-' + transf.name.replace(' ', '-') + '-' + time.strftime('%Y%m%d%H%M%S') + '.log'
+                    title = prefix + '-' + transf.name.replace(' ', '-') + \
+                        '-' + time.strftime('%Y%m%d%H%M%S') + '.log'
 
                 if transf.log_cmd:
-                    _logger.info('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
+                    _logger.info('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))  # noqa
                 else:
-                    _logger.debug('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
+                    _logger.debug('Save filed %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))  # noqa
 
                 fp = open(filename, 'rb')
                 vals = {
@@ -378,9 +415,10 @@ class PdiTransformation(orm.Model):
                 }
                 fp.close()
                 try:
-                    self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+                    self.pool.get('ir.attachment').create(
+                        cr, uid, vals, context=context)
                 except Exception, e:
-                    _logger.error('Save filed failed! %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))
+                    _logger.error('Save filed failed! %s (%s) [%s:: %d]' % (title, filename, res_model, int(res_id)))  # noqa
                     _logger.error(str(e))
 
             # We save the logfile
@@ -389,22 +427,25 @@ class PdiTransformation(orm.Model):
             # For each file, we must save it as attachment
             for tname in glob.glob(exportfiledir + '/*'):
                 # Check the name of the file, if it containt and @
-                # left part containt object name and id and right part containt name of the file and extension
+                # left part containt object name and id and right part
+                # containt name of the file and extension
                 # like sale.order-10@filename.ods
                 filename = tname.split('/')[-1]
-                if len(filename.split('@')) == 1:  # This is a normal file, attach it to the transformation
+                if len(filename.split('@')) == 1:
+                    # This is a normal file, attach it to the transformation
                     add_attachment(tname, filename)
                 elif len(filename.split('@')) == 2:
                     (record, fname) = filename.split('@')
                     record = record.split('-')
                     if len(record) == 2:
-                        add_attachment(tname, fname, res_model=record[0], res_id=record[1])
+                        add_attachment(tname, fname, res_model=record[0],
+                                       res_id=record[1])
                     else:
-                        note += _('\nBE CAREFULL, record are incorrect for %s') % record
+                        note += _('\nBE CAREFULL, record are incorrect for %s') % record  # noqa
                         add_attachment(tname, fname)
 
-                # Remove the file, becacuse removedirs() cannot delete directory
-                # if there is a file inside
+                # Remove the file, becacuse removedirs() cannot delete
+                # directory if there are files inside
                 os.remove(tname)
 
             # We must remove the temporary directory
@@ -422,7 +463,8 @@ class PdiTransformation(orm.Model):
         else:
             _logger.debug('(trans) Compose thread with %s' % ' '.join(cmd))
 
-        thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd, pdi, env, tmpdir, ctx))
+        thread.start_new_thread(thread_transformation, (cr, uid, ids, cmd,
+                                                        pdi, env, tmpdir, ctx))
         return True
 
     def run_scheduler(self, cr, uid, transformation_id=False, context=None):
@@ -433,7 +475,8 @@ class PdiTransformation(orm.Model):
             return False
 
         _logger.info('Launch transformation %d' % (transformation_id,))
-        return self.execute_transformation(cr, uid, [transformation_id], context=context)
+        return self.execute_transformation(cr, uid, [transformation_id],
+                                           context=context)
 
     def install_cron(self, cr, uid, ids, context=None):
         """
@@ -461,9 +504,9 @@ class PdiTransformation(orm.Model):
         for this transformation
         """
         trs = self.browse(cr, uid, ids[0], context=context)
-        self.pool.get('ir.cron').unlink(cr, uid, [trs.cron_id.id], context=context)
+        self.pool.get('ir.cron').unlink(cr, uid, [trs.cron_id.id],
+                                        context=context)
         return self.write(cr, uid, ids, {'cron_id': False}, context=context)
-
 
 
 class PdiTransParam(orm.Model):
@@ -472,10 +515,10 @@ class PdiTransParam(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available'),
+        'value': fields.char('Value', size=256, required=True,
+                             help='Use [[ ]] to eval, time, datetime, timedelta is available'),  # noqa
         'trans_id': fields.many2one('pdi.transformation', 'Transformation'),
     }
-
 
 
 class PdiTask(orm.Model):
@@ -487,14 +530,18 @@ class PdiTask(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=128, required=True),
-        'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
+        'instance_id': fields.many2one('pdi.instance', 'Instance',
+                                       required=True),
         'state': fields.selection(PDI_STATUS, 'Status', ),
         'directory': fields.char('Directory', size=256),
-        'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
+        'param_ids': fields.one2many('pdi.task.param', 'trans_id',
+                                     'Parameters'),
         'level': fields.selection(GET_LEVEL, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
-        'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
-        'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
+        'log_cmd': fields.boolean('Log Command',
+                                  help='Log command file as info, usefull for debugging'),  # noqa
+        'memory': fields.integer('Memory',
+                                 help='Custom memory to launch this treament, if 0 use standard'),  # noqa
     }
 
     _defaults = {
@@ -527,7 +574,8 @@ class PdiTask(orm.Model):
         if not os.path.exists(pdi):
             raise orm.except_orm(_('Error'), _('pdi path does not exist'))
 
-        # If there is a custom memory parameter to launch pan, pass it to the command line
+        # If there is a custom memory parameter to launch pan, pass it
+        # to the command line
         env = None
         if task.memory:
             env = os.environ.copy()
@@ -542,19 +590,19 @@ class PdiTask(orm.Model):
             '"-dir=%s"' % task.directory,
             '"-job=%s"' % task.name,
             '"-level=%s"' % task.level,
-            '"-param:%s=/tmp/kitchen-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),
-            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config.get('db_host', False)) and tools.config['db_host'] or 'localhost'),
-            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config.get('db_port', False)) and tools.config['db_port'] or '5432'),
+            '"-param:%s=/tmp/kitchen-stdout-%s-%s.log"' % ('PDI_LOG', cr.dbname, str(ids[0])),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_HOST', bool(tools.config.get('db_host', False)) and tools.config['db_host'] or 'localhost'),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_PORT', bool(tools.config.get('db_port', False)) and tools.config['db_port'] or '5432'),  # noqa
             '"-param:%s=%s"' % ('OERP_DB_NAME', cr.dbname),
-            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config.get('db_user', 'openerp')),
-            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config.get('db_password', 'openerp')),
-            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),
-            '"-param:%s=%s"' % ('OERP_USERNAME', task.instance_id.username or 'admin'),
-            '"-param:%s=%s"' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),
-            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),
-            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),
-            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),
-            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),
+            '"-param:%s=%s"' % ('OERP_DB_USER', tools.config.get('db_user', 'openerp')),  # noqa
+            '"-param:%s=%s"' % ('OERP_DB_PASS', tools.config.get('db_password', 'openerp')),  # noqa
+            '"-param:%s=%s"' % ('OERP_XMLRPC_PORT', bool(tools.config.get('xmlrpc_port', False)) and tools.config['xmlrpc_port'] or '8069'),  # noqa
+            '"-param:%s=%s"' % ('OERP_USERNAME', task.instance_id.username or 'admin'),  # noqa
+            '"-param:%s=%s"' % ('OERP_PASSWORD', task.instance_id.password or 'admin'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_HOST', bool(tools.config.get('smtp_server', False)) and tools.config['smtp_server'] or 'localhost'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_PORT', bool(tools.config.get('smtp_port', False)) and tools.config['smtp_port'] or '25'),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_USER', bool(tools.config.get('smtp_user', False)) and tools.config['smtp_user'] or username),  # noqa
+            '"-param:%s=%s"' % ('OERP_SMTP_PASS', bool(tools.config.get('smtp_password', False)) and tools.config['smtp_password'] or ''),  # noqa
         ]
 
         # for each param define on this task, add it as argument
@@ -572,8 +620,10 @@ class PdiTask(orm.Model):
             if additional_dict is None:
                 additional_dict = {}
 
-            if parameter and  parameter.startswith('[['):
-                return eval(parameter.replace('[[', '').replace(']]', ''), {'time': time, 'datetime': datetime, 'timedelta': timedelta}) or ''
+            if parameter and parameter.startswith('[['):
+                return eval(parameter.replace('[[', '').replace(']]', ''),
+                            {'time': time, 'datetime': datetime,
+                             'timedelta': timedelta}) or ''
             return parameter % additional_dict
 
         additionnal_params = {}
@@ -596,14 +646,18 @@ class PdiTask(orm.Model):
             cr = pooler.get_db(cr.dbname).cursor()
             _logger.debug('(task) Thread start')
 
-            out_filename = '/tmp/kitchen-stdout-%s-%s.log' % (cr.dbname, str(ids[0]))
+            out_filename = '/tmp/kitchen-stdout-%s-%s.log' % (cr.dbname,
+                                                              str(ids[0]))
             outfp = open(out_filename, 'w')
 
-            err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname, str(ids[0]))
+            err_filename = '/tmp/kitchen-stderr-%s-%s.log' % (cr.dbname,
+                                                              str(ids[0]))
             errfp = open(err_filename, 'w')
             _logger.debug('(task) Call process')
-            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None, outfp, errfp, shell=True, env=env, cwd=path)
-            _logger.debug('(task) End call process (return code: %s)' % str(retcode))
+            retcode = subprocess.call(' '.join(cmd), 0, exec_shell, None,
+                                      outfp, errfp, shell=True, env=env,
+                                      cwd=path)
+            _logger.debug('(task) End call process (return code: %s)' % str(retcode))  # noqa
             outfp.close()
             errfp.close()
 
@@ -614,11 +668,11 @@ class PdiTask(orm.Model):
             elif retcode == 1:
                 note = _('(1) Errors occurred during processing')
             elif retcode == 2:
-                note = _('(2) An unexpected error occurred during loading / running of the task')
+                note = _('(2) An unexpected error occurred during loading / running of the task')  # noqa
             elif retcode == 7:
-                note = _("(7) The task couldn't be loaded from XML or the Repository")
+                note = _("(7) The task couldn't be loaded from XML or the Repository")  # noqa
             elif retcode == 8:
-                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')
+                note = _('(8) Error loading steps or plugins (error in loading one of the plugins mostly)')  # noqa
             elif retcode == 9:
                 note = _('(9) Command line usage printing')
             else:
@@ -627,12 +681,13 @@ class PdiTask(orm.Model):
             vals = {
                 'datas': base64.encodestring(open(out_filename, 'rb').read()),
                 'datas_fname': out_filename,
-                'name': prefix + '-' + task.name.replace(' ', '-') + '-' + time.strftime('%Y%m%d%H%M%S') + '.log',
+                'name': prefix + '-' + task.name.replace(' ', '-') + '-' + time.strftime('%Y%m%d%H%M%S') + '.log',  # noqa
                 'res_model': 'pdi.task',
                 'res_id': ids[0],
                 'description': note,
             }
-            self.pool.get('ir.attachment').create(cr, uid, vals, context=context)
+            self.pool.get('ir.attachment').create(cr, uid, vals,
+                                                  context=context)
 
             self.write(cr, uid, ids, {'state': 'stop'}, context=context)
             cr.commit()
@@ -643,9 +698,8 @@ class PdiTask(orm.Model):
             _logger.info('(task) Compose thread with %s' % ' '.join(cmd))
         else:
             _logger.debug('(task) Compose thread with %s' % ' '.join(cmd))
-        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, env, ctx))
+        thread.start_new_thread(thread_task, (cr, uid, ids, cmd, pdi, env, ctx))  # noqa
         return True
-
 
 
 class PdiTaskParam(orm.Model):
@@ -654,9 +708,9 @@ class PdiTaskParam(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'value': fields.char('Value', size=256, required=True, help='Use [[ ]] to eval, time, datetime, timedelta is available',),
+        'value': fields.char('Value', size=256, required=True,
+                             help='Use [[ ]] to eval, time, datetime, timedelta is available',),  # noqa
         'trans_id': fields.many2one('pdi.task', 'Task'),
     }
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
