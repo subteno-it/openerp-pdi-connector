@@ -28,6 +28,8 @@ from openerp.osv import fields
 from openerp.tools import config
 from openerp.tools.translate import _
 from openerp.modules import get_module_path
+from openerp.addons.pdi_connector.common import PDI_VERSION, PDI_STATUS, GET_LEVEL
+
 import openerp
 import subprocess
 import os
@@ -43,17 +45,6 @@ import glob
 from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
-
-
-_pdi_version = [
-    ('3.2', 'v3.2'),
-    ('4.0', 'v4.0'),
-    ('4.1', 'v4.1'),
-    ('4.2', 'v4.2'),
-    ('4.3', 'v4.3'),
-    ('4.4', 'v4.4'),
-    ('5.0', 'v5.0'),
-]
 
 root_install = tools.config.get('pdi_path', '/opt/pdi') or '/opt/pdi'
 _logger.info('PDI Path: %s' % root_install)
@@ -74,7 +65,7 @@ class PdiInstance(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'version': fields.selection(_pdi_version, 'Version', required=True,),
+        'version': fields.selection(PDI_VERSION, 'Version', required=True,),
         'trans_ids': fields.one2many('pdi.transformation', 'instance_id', 'Transformations'),
         'task_ids': fields.one2many('pdi.task', 'instance_id', 'Tasks', ),
         'note': fields.text('Note', ),
@@ -211,20 +202,6 @@ class PdiInstanceParameters(orm.Model):
 
 
 
-_pdi_status = [
-    ('stop', 'Stopped'),
-    ('run', 'Running'),
-]
-
-_get_level = [
-    ('Basic', 'Basic'),
-    ('Detailed', 'Detailed'),
-    ('Debug', 'Debug'),
-    ('Rowlevel', 'Rowlevel'),
-    ('Error', 'Error'),
-    ('Nothing', 'Nothing'),
-]
-
 
 class PdiTransformation(orm.Model):
     """
@@ -236,10 +213,10 @@ class PdiTransformation(orm.Model):
     _columns = {
         'name': fields.char('Name', size=128, required=True),
         'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
-        'state': fields.selection(_pdi_status, 'Status'),
+        'state': fields.selection(PDI_STATUS, 'Status'),
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.trans.param', 'trans_id', 'Parameters'),
-        'level': fields.selection(_get_level, 'Level', ),
+        'level': fields.selection(GET_LEVEL, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
         'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
         'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
@@ -511,10 +488,10 @@ class PdiTask(orm.Model):
     _columns = {
         'name': fields.char('Name', size=128, required=True),
         'instance_id': fields.many2one('pdi.instance', 'Instance', required=True),
-        'state': fields.selection(_pdi_status, 'Status', ),
+        'state': fields.selection(PDI_STATUS, 'Status', ),
         'directory': fields.char('Directory', size=256),
         'param_ids': fields.one2many('pdi.task.param', 'trans_id', 'Parameters'),
-        'level': fields.selection(_get_level, 'Level', ),
+        'level': fields.selection(GET_LEVEL, 'Level', ),
         'note': fields.text('Note', help='Explain the process for the user'),
         'log_cmd': fields.boolean('Log Command', help='Log command file as info, usefull for debugging'),
         'memory': fields.integer('Memory', help='Custom memory to launch this treament, if 0 use standard'),
