@@ -81,52 +81,6 @@ class PdiInstance(osv.osv):
         'repo_pass': lambda *a: 'admin',
     }
 
-    def __init__(self, pool, cr):
-        """
-        Check if import and export schema exists, if not create them
-        """
-        cr.execute("""show server_version""")
-        pg_version = cr.fetchone()[0].split('.')
-        pg_version = tuple([int(x) for x in pg_version])
-        if pg_version >= (8, 3, 0):
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='import'""")
-            if not cr.fetchone()[0]:
-                _logger.info('Import schema have been created !')
-                cr.execute("""CREATE SCHEMA import;
-                       COMMENT ON SCHEMA import
-                       IS 'Schema use to store table for PDI treatement';""")
-
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='export'""")
-            if not cr.fetchone()[0]:
-                _logger.info('Export schema have been created !')
-                cr.execute("""CREATE SCHEMA export;
-                       COMMENT ON SCHEMA export
-                       IS 'Schema use to store table for PDI treatement';""")
-
-            # Check if kettle schema have been created, if not log a warning
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='kettle'""")
-            if not cr.fetchone()[0]:
-                _logger.info('Kettle schema does not exits, create it before use kettle!')
-
-            # check if superuser exists
-            cr.execute("""select * from pg_roles where rolname='oerpadmin';""")
-
-        # Update ir_config_parameter for using with PL/Python
-        config_obj = pool.get('ir.config_parameter')
-        user = pool.get('res.users').browse(cr, 1, 1)
-        config_obj.set_param(cr, 1, 'extlib.host', tools.config.get('netrpc_interface', 'localhost') or 'localhost')
-        config_obj.set_param(cr, 1, 'extlib.port', tools.config.get('netrpc_port', 'localhost'))
-        config_obj.set_param(cr, 1, 'extlib.user', user.login)
-        config_obj.set_param(cr, 1, 'extlib.pass', user.password)
-
-        super(PdiInstance, self).__init__(pool, cr)
-
 PdiInstance()
 
 
