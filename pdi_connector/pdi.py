@@ -26,12 +26,9 @@
 
 from openerp.osv import orm
 from openerp.osv import fields
-from openerp.tools import config
 from openerp.tools.translate import _
-from openerp.modules import get_module_path
 from openerp.addons.pdi_connector.common import PDI_VERSION, PDI_STATUS, GET_LEVEL  # noqa
 
-import openerp
 import subprocess
 import os
 import base64
@@ -90,122 +87,6 @@ class PdiInstance(orm.Model):
         'repo_user': 'admin',
         'repo_pass': 'admin',
     }
-
-    def __init__(self, pool, cr):
-        """
-        Check if import and export schema exists, if not create them
-        """
-        cr.execute("""show server_version""")
-        pg_version = cr.fetchone()[0].split('.')
-        pg_version = tuple([int(x) for x in pg_version])
-        if pg_version >= (8, 3, 0):
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='import'""")
-            if not cr.fetchone()[0]:
-                _logger.info('Import schema have been created !')
-                cr.execute("""CREATE SCHEMA import;
-        COMMENT ON SCHEMA import
-        IS 'Schema use to store table to import data for PDI treatement';""")
-
-            cr.execute("""SELECT count(*)
-                          FROM   pg_namespace
-                          WHERE  nspname='export'""")
-            if not cr.fetchone()[0]:
-                _logger.info('Export schema have been created !')
-                cr.execute("""CREATE SCHEMA export;
-        COMMENT ON SCHEMA export
-        IS 'Schema use to store table to export data for PDI treatement';""")
-
-            # To continue correctly, we check if we have admin privilege
-            # in these database server
-            admin_privilege = False
-            cr.execute("""SELECT count(*) from pg_roles
-                           WHERE rolname=%s and rolcanlogin=false;
-                       """, (config.get('db_admin', 'oerpadmin'),))
-            if cr.fetchone()[0]:
-                admin_privilege = True
-
-            # Check if kettle PostgreSQL user exists, if yes:
-            pdi_user_exists = False
-            cr.execute("""SELECT count(*) from pg_roles
-                       WHERE rolname=%s and rolcanlogin=True;
-                       """, (config.get('pdi_dbuser', 'kettle'),))
-            if cr.fetchone()[0]:
-                pdi_user_exists = True
-            else:
-                # If kettle user doesn't exist,
-                # check if we have role with SUPERUSER rights
-                if admin_privilege:
-                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))  # noqa
-                    cr.execute("""CREATE ROLE """ + config.get('pdi_dbuser', 'kettle') + """ LOGIN ENCRYPTED PASSWORD %s
-                        NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;""", (config.get('pdi_dbpass', 'secret'),))  # noqa
-
-                    cr.execute("""ALTER ROLE """ + config.get('pdi_dbuser', 'kettle') + """ SET search_path=kettle;""")  # noqa
-                    cr.execute("""COMMENT ON ROLE """ + config.get('pdi_dbuser', 'kettle') + """ IS 'User for pentaho data integration';""")  # noqa
-                    cr.commit()
-                    cr.execute("""RESET ROLE;""")
-                    pdi_user_exists = True
-
-            # Check if kettle schema have been created, if not log a warning
-            cr.execute("""SELECT count(*) FROM pg_namespace
-                           WHERE  nspname='kettle'""")
-            if not cr.fetchone()[0]:
-                if pdi_user_exists and admin_privilege:
-                    cr.execute("""SET ROLE %s""", (config.get('db_admin', 'oerpadmin'),))  # noqa
-                    _logger.warn('Kettle schema does not exits, we create it automatically')  # noqa
-                    cr.execute("""CREATE SCHEMA kettle AUTHORIZATION """ + config.get('pdi_dbuser', 'kettle') + ";")  # noqa
-                    cr.execute("""COMMENT ON SCHEMA kettle IS 'Schema pour Pentaho Data Integration';""")  # noqa
-
-                    # After create the schema,
-                    # we initialize the repository with a SQL file
-                    fct_file = openerp.tools.misc.file_open(
-                        os.path.join(get_module_path('pdi_connector'),
-                                     'sql', 'repository44.sql'))
-                    try:
-                        query = fct_file.read() % {
-                            'db_user': config.get('pdi_dbuser', 'kettle')}
-                        cr.execute(query)
-                        cr.commit()
-                    finally:
-                        fct_file.close()
-
-                    cr.execute("""RESET ROLE;""")
-                else:
-                    _logger.warn('Kettle schema does not exits, create it before use kettle! or define an PostgreSQL Admin user')  # noqa
-
-            # Check if all table in schema kettle is owned by kettle user
-            if pdi_user_exists and admin_privilege:
-                cr.execute("""SET ROLE %s""", (
-                    config.get('db_admin', 'oerpadmin'),))
-                # First we always affect owner kettle to the schema kettle
-                cr.execute("""ALTER SCHEMA kettle OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
-                cr.execute("""SELECT schemaname, tablename
-                                FROM pg_tables
-                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """'
-                                 AND tableowner != '""" + config.get('pdi_dbuser', 'kettle') + """';""")  # noqa
-                for tbl in cr.fetchall():
-                    _logger.warn("Table %s.%s does not have the good right" % (tbl[0], tbl[1]))  # noqa
-                    cr.execute("""ALTER TABLE """ + tbl[0] + """.""" + tbl[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
-                # Do the same for sequence
-                cr.execute("""SELECT schemaname, relname
-                                FROM pg_statio_all_sequences
-                               WHERE schemaname='""" + config.get('pdi_dbuser', 'kettle') + """';""")  # noqa
-                for seq in cr.fetchall():
-                    cr.execute("""ALTER SEQUENCE """ + seq[0] + """.""" + seq[1] + """ OWNER TO """ + config.get('pdi_dbuser', 'kettle') + """;""")  # noqa
-
-        # Update ir_config_parameter for using with PL/Python
-        config_obj = pool.get('ir.config_parameter')
-        user = pool.get('res.users').browse(cr, 1, 1)
-        config_obj.set_param(
-            cr, 1, 'extlib.host',
-            tools.config.get('netrpc_interface', 'localhost') or 'localhost')
-        config_obj.set_param(
-            cr, 1, 'extlib.port', tools.config.get('netrpc_port', 'localhost'))
-        config_obj.set_param(cr, 1, 'extlib.user', user.login)
-        config_obj.set_param(cr, 1, 'extlib.pass', user.password)
-
-        super(PdiInstance, self).__init__(pool, cr)
 
 
 class PdiInstanceParameters(orm.Model):
